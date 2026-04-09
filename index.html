@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TopUpClin - Full Tailwind 100%</title>
+    <title>TopUpClin</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,11 +19,19 @@
             theme: {
                 extend: {
                     colors: {
-                        nav: '#2a0b80', top: '#321199', bottom: '#5524d7',
-                        card: '#2c0d83', input: '#4417ac', summary: '#20085a',
-                        muted: 'rgba(255, 255, 255, 0.75)', 'muted-dark': '#8a71d4',
-                        green: '#f8ce1a', yellow: '#f8ce1a', ribbon: '#471bb9',
-                        'badge-bg': '#291076', cyan: '#4ce5c1'
+                        nav: '#2a0b80',
+                        top: '#321199',
+                        bottom: '#5524d7',
+                        card: '#2c0d83',
+                        input: '#4417ac',
+                        summary: '#20085a',
+                        muted: 'rgba(255, 255, 255, 0.75)',
+                        'muted-dark': '#8a71d4',
+                        green: '#f8ce1a',
+                        yellow: '#f8ce1a',
+                        ribbon: '#471bb9',
+                        'badge-bg': '#291076',
+                        cyan: '#4ce5c1'
                     },
                     fontFamily: {
                         sans: ['"IBM Plex Sans Condensed"', 'sans-serif'],
@@ -33,43 +41,120 @@
                         flashAnim: {
                             'from': { opacity: '1', transform: 'scale(1)' },
                             'to': { opacity: '0.7', transform: 'scale(1.15)', textShadow: '0 0 10px #f8ce1a' }
-                        },
-                        snowFall: {
-                            '0%': { transform: 'translateY(-10px) translateX(0)', opacity: '0.8' },
-                            '100%': { transform: 'translateY(200px) translateX(20px)', opacity: '0' }
                         }
                     },
                     animation: {
-                        'flash': 'flashAnim 1s infinite alternate',
-                        'snow': 'snowFall linear infinite'
+                        'flash': 'flashAnim 1s infinite alternate'
                     }
                 }
-            },
-            plugins: [
-                // Plugin buatan untuk hide scrollbar secara native di Tailwind
-                function({ addUtilities }) {
-                    addUtilities({
-                        '.hide-scroll': {
-                            '-ms-overflow-style': 'none',
-                            'scrollbar-width': 'none',
-                            '&::-webkit-scrollbar': {
-                                display: 'none'
-                            }
-                        }
-                    })
-                }
-            ]
+            }
         }
     </script>
+
+    <style>
+        /* Elemen dinamis & pseudo yang kompleks */
+        .logo-icon {
+            background: conic-gradient(from 180deg, #ffffff 0deg, #bda8f2 120deg, #3ad989 240deg, #ffffff 360deg);
+            mask-image: radial-gradient(transparent 30%, black 35%);
+            -webkit-mask-image: radial-gradient(transparent 30%, black 35%);
+        }
+        .logo-icon::after {
+            content: ''; position: absolute; top: -2px; right: -2px; bottom: 50%; left: 50%; background: #2a0b80;
+        }
+
+        /* Menyembunyikan scrollbar */
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* ================= ANIMASI SALJU MURNI ================= */
+        @keyframes snow-fall {
+            0% { transform: translateY(-10px) translateX(0); opacity: 0.8; }
+            100% { transform: translateY(200px) translateX(20px); opacity: 0; }
+        }
+        .snow-wrapper {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden; pointer-events: none; z-index: 1;
+        }
+        .snowflake {
+            position: absolute; top: -10px; background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%; pointer-events: none; animation: snow-fall linear infinite;
+        }
+
+        /* ================= FLOATING BTN & BOTTOM SHEET ================= 
+           (Menggunakan Vanilla CSS asli milik lu agar animasi & posisinya 100% sempurna tanpa gangguan Tailwind) */
+        
+        .floating-all-btn {
+            position: fixed;
+            bottom: 10%;
+            right: 0;
+            transform: translateY(-50%);
+            background-color: #321199; /* var(--bg-top) */
+            color: #ffffff;
+            padding: 5px 5px 5px 5px;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            box-shadow: -4px 4px 12px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.99);
+            border-right: none;
+            z-index: 999;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .floating-all-btn i {
+            font-size: 33px;
+            transition: transform 0.8s ease;
+        }
+        .floating-all-btn.active i {
+            transform: rotate(180deg);
+            transition: all 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .floating-all-btn.active {
+            background-color: #2a0b80; /* var(--bg-nav) */
+            padding-right: 30px;
+            border-bottom-left-radius: 30px;
+            border-top-left-radius: 30px;
+            border-top: 1px solid #fff;
+            border-left: 1px solid #fff;
+            border-bottom: 1px solid #fff;
+            bottom: 44.7%;
+        }
+        @media (min-width: 421px) {
+            .floating-all-btn {
+                right: calc(50% - 210px);
+            }
+        }
+
+        .sheet-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5); z-index: 997; opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+        }
+        .sheet-overlay.active {
+            opacity: 1; pointer-events: auto;
+        }
+
+        .bottom-sheet-menu {
+            position: fixed; bottom: 0; left: 0; width: 100%; max-height: 50%;
+            background-color: #2a0b80; /* var(--bg-nav) */
+            border-top-left-radius: 0px; border-top-right-radius: 0px;
+            z-index: 998; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; flex-direction: column; overscroll-behavior: none;
+        }
+        .bottom-sheet-menu.open {
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body class="bg-[#1a0847] flex justify-center text-white font-sans antialiased [-webkit-tap-highlight-color:transparent]">
 
-<div class="w-full max-w-[420px] bg-top min-h-screen flex flex-col relative">
+<div class="w-full max-w-[420px] bg-top min-h-screen flex flex-col relative overflow-x-hidden">
     
-    <header class="bg-nav flex items-center justify-between p-4 sticky top-0 z-[1000] shadow-md">
+    <header class="bg-nav flex items-center justify-between p-4 sticky top-0 z-[1000]">
         <div class="flex items-center gap-4">
             <div class="flex items-center gap-[6px]">
-                <div class="w-6 h-6 rounded-full relative bg-[conic-gradient(from_180deg,#ffffff_0deg,#bda8f2_120deg,#3ad989_240deg,#ffffff_360deg)] [mask-image:radial-gradient(transparent_30%,black_35%)] [-webkit-mask-image:radial-gradient(transparent_30%,black_35%)] after:content-[''] after:absolute after:-top-[2px] after:-right-[2px] after:bottom-1/2 after:left-1/2 after:bg-nav"></div>
+                <div class="logo-icon w-6 h-6 rounded-full relative"></div>
                 <span class="font-extrabold text-[20px] tracking-tight">TopupClin</span>
             </div>
         </div>
@@ -94,7 +179,7 @@
         </div>
     </section>
 
-    <section class="flex justify-between px-4 pt-6 pb-5 bg-card relative has-snow">
+    <section class="flex justify-between px-4 pt-6 pb-5 bg-card relative has-snow border-b-0 border-[#1a2335]">
         <div class="flex items-center gap-[6px] text-[11px] font-semibold text-slate-300 relative z-[2]">
             <i class="ph-fill ph-lightning text-yellow-400 text-[14px]"></i> Proses Cepat
         </div>
@@ -119,7 +204,7 @@
         </div>
         
         <div class="flex overflow-x-auto gap-2.5 px-4 pb-5 hide-scroll">
-            <div class="min-w-[135px] bg-card rounded-[7px] p-2.5 relative flex flex-col gap-2 cursor-pointer transition-transform active:scale-95">
+            <div class="min-w-[135px] bg-card rounded-[7px] p-2.5 relative flex flex-col gap-2 cursor-pointer transition-transform active:scale-95 border-0 border-[rgba(248,206,26,0.25)]">
                 <div class="absolute top-0 right-0 bg-red-500 text-white text-[11px] font-extrabold py-[1px] px-[3px] rounded-bl-[7px] rounded-tr-[7px] z-10">-50%</div>
                 <div class="w-full h-[75px] rounded-[4px] overflow-hidden bg-[#1a0847]">
                     <img src="game.jpg" onerror="this.src='https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=1974&auto=format&fit=crop'" alt="86 Diamonds" class="w-full h-full object-cover">
@@ -135,7 +220,7 @@
                 </div>
             </div>
 
-            <div class="min-w-[135px] bg-card rounded-[7px] p-2.5 relative flex flex-col gap-2 cursor-pointer transition-transform active:scale-95">
+            <div class="min-w-[135px] bg-card rounded-[7px] p-2.5 relative flex flex-col gap-2 cursor-pointer transition-transform active:scale-95 border-0 border-[rgba(248,206,26,0.25)]">
                 <div class="absolute top-0 right-0 bg-red-500 text-white text-[11px] font-extrabold py-[1px] px-[3px] rounded-bl-[7px] rounded-tr-[7px] z-10">-30%</div>
                 <div class="w-full h-[75px] rounded-[4px] overflow-hidden bg-[#1a0847]">
                     <img src="game.jpg" onerror="this.src='https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=1974&auto=format&fit=crop'" alt="172 Diamonds" class="w-full h-full object-cover">
@@ -151,7 +236,7 @@
                 </div>
             </div>
 
-            <div class="min-w-[135px] bg-card rounded-[7px] p-2.5 relative flex flex-col gap-2 cursor-pointer transition-transform active:scale-95">
+            <div class="min-w-[135px] bg-card rounded-[7px] p-2.5 relative flex flex-col gap-2 cursor-pointer transition-transform active:scale-95 border-0 border-[rgba(248,206,26,0.25)]">
                 <div class="absolute top-0 right-0 bg-red-500 text-white text-[11px] font-extrabold py-[1px] px-[3px] rounded-bl-[7px] rounded-tr-[7px] z-10">-40%</div>
                 <div class="w-full h-[75px] rounded-[4px] overflow-hidden bg-[#1a0847]">
                     <img src="game.jpg" onerror="this.src='https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=1974&auto=format&fit=crop'" alt="257 Diamonds" class="w-full h-full object-cover">
@@ -276,19 +361,51 @@
         
         <div class="pt-6 px-4 pb-0 relative" id="descTabBody">
             
-            <div id="tab-deskripsi" class="tab-content block relative overflow-hidden max-h-[380px] transition-[max-height] duration-800 ease-[cubic-bezier(0.4,0,0.2,1)] [&.expanded]:max-h-[2500px] [&.expanded]:pb-6">
-                <h3 class="text-[16px] font-extrabold mb-4 text-white">ML Diamonds</h3>
-                <p class="text-[13px] leading-[1.6] text-muted mb-4 text-justify">
-                    Jika kamu menyukai game aksi yang sangat kompetitif dan serba cepat dan merasakan dorongan untuk menunjukkan bakat dan keterampilan bermain tim, maka MOBA Mobile Legends harus menjadi pilihanmu. Fakta luar biasanya adalah bahwa Mobile Legends Bang Bang adalah game gratis untuk dimainkan, tetapi perlu diingat bahwa ia memiliki bagian transaksi mikro.
-                </p>
-                <p class="text-[13px] leading-[1.6] text-muted mb-4 text-justify">
-                    Pernah ngerasa akun Mobile Legends kamu kurang greget karena belum punya hero atau skin impian? Di dunia Mobile Legends: Bang Bang, penampilan dan kekuatan itu penting banget. Biar kamu bisa bebas berekspresi dan memaksimalkan potensi akunmu, game ini nyediain beberapa jenis alat tukar yang punya fungsi masing-masing. Mulai dari beli hero baru biar gak bosen, upgrade emblem biar damage makin sakit, sampai koleksi skin yang bikin lawan kena mental duluan pas loading screen. Nah, buat dapetin itu semua, kamu pasti udah gak asing lagi sama yang namanya Ticket dan Battle Points (Gold). Dua mata uang dasar ini emang bisa kamu kumpulin secara gratis. Caranya cukup dengan rajin-rajin main, nyelesaiin misi harian, atau ikutan event tertentu. Tapi kita sama-sama tahu, ngumpulin Ticket dan Gold itu butuh waktu grinding dan kesabaran ekstra, apalagi kalau hero incaranku harganya lumayan mahal. Di sinilah Diamond Mobile Legends jadi penentu segalanya! Diamond adalah mata uang premium yang paling spesial dan berharga di Land of Dawn. Bisa dibilang, Diamond ini ibarat 'jalur VIP' yang bisa digunakan untuk hampir semua jenis transaksi di dalam game. Kamu gak perlu lagi capek nunggu berminggu-minggu; dengan Diamond, kamu bisa langsung ikut spin event eksklusif, beli Starlight Member bulanan, dapetin skin idaman, atau sekadar kirim gift ke teman mabar kamu. Singkatnya, kalau kamu mau menikmati seluruh fitur Mobile Legends secara maksimal dan instan, Diamond adalah kuncinya. Gak perlu bingung cari tempat top up yang terpercaya. Langsung aja isi ulang Diamond MLBB kamu di TopupClin! Prosesnya kilat, harganya aman di kantong, dan pastinya dijamin legal biar akun kesayanganmu tetap aman.
-                </p>
-                
-                <div class="read-more-wrapper absolute bottom-0 left-0 right-0 h-[100px] bg-gradient-to-b from-[#2c0d8300] via-card to-card flex items-end justify-center pb-4 transition-all duration-500 ease-in-out [.expanded_&]:relative [.expanded_&]:h-auto [.expanded_&]:bg-transparent [.expanded_&]:pb-0 [.expanded_&]:mt-4">
-                    <span class="text-white text-[12px] font-normal cursor-pointer" id="readMoreText" onclick="toggleDescription()">Baca selengkapnya</span>
-                </div>
-            </div>
+<div id="tab-deskripsi" class="tab-content block relative overflow-hidden max-h-[380px] transition-[max-height] duration-800 ease-[cubic-bezier(0.4,0,0.2,1)] [&.expanded]:max-h-[2500px] [&.expanded]:pb-6">
+    
+    <h3 class="text-[16px] font-extrabold mb-3 text-white">Top Up Diamond Mobile Legends (ML)</h3>
+    <p class="text-[13px] leading-[1.6] text-muted mb-5 text-justify">
+        Jika kamu menyukai game aksi kompetitif MOBA yang serba cepat, <strong>Mobile Legends: Bang Bang</strong> adalah pilihan yang tepat! Bebaskan ekspresimu dan maksimalkan potensi akunmu di Land of Dawn tanpa batas.
+    </p>
+
+    <h4 class="text-[14px] font-bold mb-3 text-white flex items-center gap-2 border-l-[3px] border-yellow pl-2">
+        Mengapa Butuh Diamond?
+    </h4>
+    <p class="text-[13px] leading-[1.6] text-muted mb-3 text-justify">
+        Meski <em>Ticket</em> dan <em>Battle Points (Gold)</em> bisa didapatkan gratis lewat misi, mengumpulkan keduanya butuh waktu (<em>grinding</em>) ekstra. Di sinilah <strong>Diamond</strong> hadir sebagai jalur VIP dan mata uang premium paling berharga untuk:
+    </p>
+    
+    <ul class="text-[13px] text-muted mb-5 flex flex-col gap-2.5">
+        <li class="flex items-start gap-2">
+            <i class="ph-fill ph-check-circle text-yellow text-[16px] shrink-0 mt-[2px]"></i>
+            <span class="leading-[1.5]"><strong>Beli Hero & Skin Impian:</strong> Bikin lawan kena mental duluan saat di <em>loading screen</em>.</span>
+        </li>
+        <li class="flex items-start gap-2">
+            <i class="ph-fill ph-check-circle text-yellow text-[16px] shrink-0 mt-[2px]"></i>
+            <span class="leading-[1.5]"><strong>Gacha & Spin Event:</strong> Ikuti event eksklusif secara instan tanpa nunggu lama.</span>
+        </li>
+        <li class="flex items-start gap-2">
+            <i class="ph-fill ph-check-circle text-yellow text-[16px] shrink-0 mt-[2px]"></i>
+            <span class="leading-[1.5]"><strong>Starlight Member:</strong> Nikmati berbagai <em>benefit</em> bulanan dan skin eksklusifnya.</span>
+        </li>
+        <li class="flex items-start gap-2">
+            <i class="ph-fill ph-check-circle text-yellow text-[16px] shrink-0 mt-[2px]"></i>
+            <span class="leading-[1.5]"><strong>Kirim Gift:</strong> Berbagi item, tiket, atau skin idaman dengan teman mabar kesayangan.</span>
+        </li>
+    </ul>
+
+    <h4 class="text-[14px] font-bold mb-3 text-white flex items-center gap-2 border-l-[3px] border-yellow pl-2">
+        Top Up Murah & Aman
+    </h4>
+    <p class="text-[13px] leading-[1.6] text-muted mb-4 text-justify">
+        Gak perlu bingung cari tempat top up! Isi ulang Diamond MLBB kamu di <strong>TopupClin</strong> sekarang juga. Prosesnya dijamin <strong>kilat</strong>, harganya <strong>aman di kantong</strong>, dan 100% <strong>legal</strong> agar akun kesayanganmu selalu terjamin keamanannya.
+    </p>
+    
+    <div class="read-more-wrapper absolute bottom-0 left-0 right-0 h-[100px] bg-gradient-to-b from-[#2c0d8300] via-card to-card flex items-end justify-center pb-4 transition-all duration-500 ease-in-out [.expanded_&]:relative [.expanded_&]:h-auto [.expanded_&]:bg-transparent [.expanded_&]:pb-0 [.expanded_&]:mt-4">
+        <span class="text-white text-[12px] font-normal cursor-pointer bg-top px-4 py-1.5 rounded-full border border-white/10 shadow-lg" id="readMoreText" onclick="toggleDescription()">Baca selengkapnya</span>
+    </div>
+</div>
+
 
             <div id="tab-panduan" class="tab-content hidden relative overflow-hidden max-h-[380px] transition-[max-height] duration-800 ease-[cubic-bezier(0.4,0,0.2,1)] [&.active]:block [&.expanded]:max-h-[2500px] [&.expanded]:pb-6">
                 <h3 class="text-[16px] font-extrabold mb-4 text-white">Cara Top Up</h3>
@@ -405,9 +522,9 @@
         </div>
     </section>
 
-    <div class="fixed inset-0 bg-black/50 z-[997] opacity-0 pointer-events-none transition-opacity duration-400 [&.active]:opacity-100 [&.active]:pointer-events-auto" id="sheetOverlay"></div>
+    <div class="sheet-overlay"></div>
 
-    <div class="fixed bottom-0 left-0 w-full max-h-[50%] bg-nav rounded-t-none z-[998] translate-y-full transition-transform duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] flex flex-col overscroll-none [&.open]:translate-y-0" id="bottomSheet">
+    <div class="bottom-sheet-menu">
         <div class="overflow-y-auto py-6 px-4 flex flex-col gap-6 overscroll-contain hide-scroll">
             
             <div class="flex flex-col gap-3">
@@ -474,8 +591,8 @@
         </div>
     </div>
 
-    <div class="fixed bottom-[10%] right-0 -translate-y-1/2 bg-top text-white p-[5px] rounded-l-[10px] shadow-[-4px_4px_12px_rgba(0,0,0,0.25)] border border-white border-r-0 z-[999] cursor-pointer flex items-center justify-center transition-all duration-[600ms] ease-[cubic-bezier(0.4,0,0.2,1)] sm:right-[calc(50%-210px)] [&.active]:bg-nav [&.active]:pr-[30px] [&.active]:rounded-l-[30px] [&.active]:border-l [&.active]:border-b [&.active]:border-t [&.active]:border-white [&.active]:bottom-[44.7%]" id="floatingBtn">
-        <i class="ph ph-squares-four text-[33px] transition-transform duration-[800ms] ease-in-out [.active_&]:rotate-180 [.active_&]:transition-all [.active_&]:duration-[900ms] [.active_&]:ease-[cubic-bezier(0.4,0,0.2,1)]" id="floatingIcon"></i>
+    <div class="floating-all-btn">
+        <i class="ph ph-squares-four"></i>
     </div>
 
 </div>
@@ -509,10 +626,10 @@
     }
 
     // JS Floating Menu
-    const floatingBtn = document.getElementById('floatingBtn');
-    const floatingIcon = document.getElementById('floatingIcon');
-    const bottomSheet = document.getElementById('bottomSheet');
-    const sheetOverlay = document.getElementById('sheetOverlay');
+    const floatingBtn = document.querySelector('.floating-all-btn');
+    const floatingIcon = floatingBtn ? floatingBtn.querySelector('i') : null;
+    const bottomSheet = document.querySelector('.bottom-sheet-menu');
+    const sheetOverlay = document.querySelector('.sheet-overlay');
 
     function toggleMenu() {
         if(!floatingBtn || !bottomSheet || !sheetOverlay) return;
@@ -598,23 +715,20 @@
         }, 1000);
     }
 
-    // JS Animasi Salju (Full Tailwind Dynamic Injection)
+    // JS Animasi Salju (DOM Load)
     document.addEventListener('DOMContentLoaded', function() {
         startFlashSaleTimer();
 
         const snowContainers = document.querySelectorAll('.has-snow');
         snowContainers.forEach(container => {
             const snowWrapper = document.createElement('div');
-            // Class Tailwind untuk membungkus salju
-            snowWrapper.className = 'absolute inset-0 overflow-hidden pointer-events-none z-[1]';
+            snowWrapper.classList.add('snow-wrapper');
             container.appendChild(snowWrapper);
             
             const snowCount = 25; 
             for (let i = 0; i < snowCount; i++) {
                 const snowflake = document.createElement('div');
-                
-                // Animasi salju pakai utility Tailwind (animate-snow)
-                snowflake.className = 'absolute -top-[10px] bg-white/80 rounded-full pointer-events-none animate-snow';
+                snowflake.classList.add('snowflake');
                 
                 const size = Math.random() * 3 + 2; 
                 const left = Math.random() * 100; 
