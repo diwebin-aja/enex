@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TopUpClin - Separated</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Original+Surfer&display=swap" rel="stylesheet">    
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        nav: '#2a0b80',
+                        top: '#321199',
+                        bottom: '#5524d7',
+                        card: '#2c0d83',
+                        input: '#4417ac',
+                        summary: '#20085a',
+                        muted: 'rgba(255, 255, 255, 0.75)',
+                        'muted-dark': '#8a71d4',
+                        green: '#f8ce1a',
+                        yellow: '#f8ce1a',
+                        ribbon: '#471bb9',
+                        'badge-bg': '#291076',
+                        cyan: '#4ce5c1'
+                    },
+                    fontFamily: {
+                        sans: ['"IBM Plex Sans Condensed"', 'sans-serif'],
+                        surfer: ['"Original Surfer"', 'sans-serif']
+                    },
+                    keyframes: {
+                        flashAnim: {
+                            'from': { opacity: '1', transform: 'scale(1)' },
+                            'to': { opacity: '0.7', transform: 'scale(1.15)', textShadow: '0 0 10px #f8ce1a' }
+                        }
+                    },
+                    animation: {
+                        'flash': 'flashAnim 1s infinite alternate'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#1a0847] flex justify-center text-white font-sans antialiased [-webkit-tap-highlight-color:transparent]">
+
+<div class="w-full max-w-[420px] bg-top min-h-screen flex flex-col relative">
+    
+    <header class="bg-nav flex items-center justify-between p-4 sticky top-0 z-[1000]">
+        <div class="flex items-center gap-4">
+            <div class="flex items-center gap-[6px]">
+                <div class="logo-icon w-6 h-6 rounded-full relative"></div>
+                <span class="font-extrabold text-[20px] tracking-tight">TopupClin</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-[14px] text-[24px] cursor-pointer">
+            <i class="ph ph-magnifying-glass"></i>
+            <i class="ph ph-user"></i>
+            <i class="ph ph-list"></i>          
+        </div>
+    </header>
+    
+    <section class="w-full h-[220px] relative">
+        <img class="w-full h-full object-cover object-top" src="baner.jpg" onerror="this.src='https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop'" alt="Hero Banner">
+    </section>
+
+    <section class="flex px-4 relative z-10 bg-card has-snow">
+        <div class="mt-[-50px] shrink-0 [perspective:500px] relative z-[2]">
+            <img src="game.jpg" onerror="this.src='https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=1974&auto=format&fit=crop'" alt="Game Icon" class="w-[140px] h-[130px] rounded-[18px] object-cover origin-left [transform:rotateY(28deg)] shadow-[-8px_8px_15px_rgba(0,0,0,0.5)] transition-transform duration-300">
+        </div>
+        <div class="mt-4 -ml-[9px] relative z-[2]">
+            <h1 class="text-white text-[15px] font-extrabold uppercase tracking-[0.5px] font-surfer opacity-90">MOBILE LEGENDS (ALL REGION)</h1>
+            <p class="text-yellow opacity-80 text-[13px] font-semibold mt-1">Moonton</p>
+        </div>
+    </section>
+
+    <section class="flex justify-between px-4 pt-6 pb-5 bg-card relative has-snow">
+        <div class="flex items-center gap-[6px] text-[11px] font-semibold text-slate-300 relative z-[2]">
+            <i class="ph-fill ph-lightning text-yellow-400 text-[14px]"></i> Proses Cepat
+        </div>
+        <div class="flex items-center gap-[6px] text-[11px] font-semibold text-slate-300 relative z-[2]">
+            <i class="ph-fill ph-chat-circle-dots text-blue-400 text-[14px]"></i> Layanan Chat 24/7
+        </div>
+        <div class="flex items-center gap-[6px] text-[11px] font-semibold text-slate-300 relative z-[2]">
+            <i class="ph-fill ph-shield-check text-emerald-400 text-[14px]"></i> Pembayaran Aman!
+        </div>
+    </section>
+
+    <section class="pt-4 pb-0 bg-transparent">
+        <div class="flex justify-between items-center px-4 mb-3">
+            <h2 class="text-[13px] font-extrabold flex items-center gap-[6px] text-yellow uppercase font-surfer -mb-1">
+                Flash Sale <i class="ph-fill ph-lightning text-[16px] animate-flash"></i>
+            </h2>
+            <div class="flex gap-1 items-center text-[12px] font-bold -mb-2 font-surfer text-yellow">
+                <span class="rounded-sm shadow-none" id="fs-hours">02</span> / 
+                <span class="rounded-sm shadow-none" id="fs-mins">15</span> / 
+                <span class="rounded-sm shadow-none" id="fs-secs">45</span>
+            </div>
+        </div>
+        
+        <div class="flex overflow-x-auto gap-2.5 px-4 pb-5 hide-scroll">
+            <div class="min-w-[135px] bg-card rounded-[7px] p-2.5 relative flex flex-col gap-2 cursor-pointer transition-transform active:scale-95">
+                <div class="absolute top-0 right-0 bg-red-500 text-white text-[11px] font-extrabold py-[1px] px-[3px] rounded-bl-[7px] rounded-tr-[7px] z-10">-50%</div>
+                <div class="w-full h-[75px] rounded-[4px] overflow-hidden bg-[#1a0847]">
+                    <img src="game.jpg" onerror="this.src='https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=1974&auto=format&fit=crop'" alt="86 Diamonds" class="w-full h-full object-cover">
+                </div>
+                <div class="flex flex-col">
+                    <h4 class="text-[12px] font-bold text-white mb-[2px] whitespace-nowrap overflow-hidden text-ellipsis">86 Diamonds</h4>
+                    <span class="text-[9px] text-muted line-through mb-[5px]">Rp 25.000</span>
+                    <span class="text-[12px] font-extrabold text-yellow mb-2">Rp 12.500</span>
+                    <div class="w-full bg-white/10 h-1 relative mb-1">
+                        <div class="h-full bg-gradient-to-r from-red-500 to-yellow w-[15%]"></div>
+                    </div>
+                    <span class="text-[10px] text-muted text-right font-semibold">Tersisa 15</span>
+                </div>
+            </div>
+
+            <div class="min-w-[135px] bg-card rounded-[7px] p-2.5 relative flex flex-col gap-2 cursor-pointer transition-transform active:scale-95">
+                <div class="absolute top-0 right-0 bg-red-500 text-white text-[11px] font-extrabold py-[1px] px-[3px] rounded-bl-[7px] rounded-tr-[7px] z-10">-30%</div>
+                <div class="w-full h-[75px] rounded-[4px] overflow-hidden bg-[#1a0847]">
+                    <img src="game.jpg" onerror="this.src='https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=1974&auto=format&fit=crop'" alt="172 Diamonds" class="w-full h-full object-cover">
+                </div>
+                <div class="flex flex-col">
+                    <h4 class="text-[12px] font-bold text-white mb-[2px] whitespace-nowrap overflow-hidden text-ellipsis">172 Diamonds</h4>
+                    <span class="text-[9px] text-muted line-through mb-[5px]">Rp 50.000</span>
+                    <span class="text-[12px] font-extrabold text-yellow mb-2">Rp 35.000</span>
+                    <div class="w-full bg-white/10 h-1 relative mb-1">
+                        <div class="h-full bg-gradient-to-r from-red-500 to-yellow w-[45%]"></div>
+                    </div>
+                    <span class="text-[10px] text-muted text-right font-semibold">Tersisa 10</span>
+                </div>
+            </div>
+
+            <div class="min-w-[135px] bg-card rounded-[7px] p-2.5 relative flex flex-col gap-2 cursor-pointer transition-transform active:scale-95">
+                <div class="absolute top-0 right-0 bg-red-500 text-white text-[11px] font-extrabold py-[1px] px-[3px] rounded-bl-[7px] rounded-tr-[7px] z-10">-40%</div>
+                <div class="w-full h-[75px] rounded-[4px] overflow-hidden bg-[#1a0847]">
+                    <img src="game.jpg" onerror="this.src='https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=1974&auto=format&fit=crop'" alt="257 Diamonds" class="w-full h-full object-cover">
+                </div>
+                <div class="flex flex-col">
+                    <h4 class="text-[12px] font-bold text-white mb-[2px] whitespace-nowrap overflow-hidden text-ellipsis">257 Diamonds</h4>
+                    <span class="text-[9px] text-muted line-through mb-[5px]">Rp 75.000</span>
+                    <span class="text-[12px] font-extrabold text-yellow mb-2">Rp 45.000</span>
+                    <div class="w-full bg-white/10 h-1 relative mb-1">
+                        <div class="h-full bg-gradient-to-r from-red-500 to-yellow w-[80%]"></div>
+                    </div>
+                    <span class="text-[10px] text-muted text-right font-semibold">Tersisa 20</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <h2 class="text-[13px] font-bold mx-4 mb-3 mt-0">Pilih Produk *</h2>
+    
+    <section class="px-4 flex flex-col gap-2.5">
+        <div class="nominal-card active bg-card rounded-[15px] py-4 px-2.5 flex items-center justify-between border-[1.3px] border-transparent cursor-pointer relative z-10 transition-none [&.active]:border-white" onclick="selectCard(this, '5 Diamonds', 'Rp 1.564,00')">
+            <div class="flex items-center gap-[7px]">
+                <img src="diamond-mini.jpg" onerror="this.src='https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=50'" alt="Icon" class="w-[25px] h-[25px] object-cover">
+                <span class="text-[14px] font-medium">5 Diamonds</span>
+            </div>
+            <div class="text-right">
+                <div class="text-[13px] font-bold mb-[2px]">Rp 1.564,00</div>
+                <div class="text-[10px] text-green font-normal">10% Cashback</div>
+            </div>
+            <div class="absolute -top-[1px] -left-[1px] bg-yellow text-badge-bg border-r border-b border-l-2 border-t-2 border-white rounded-tl-[11px] rounded-br-[6px] w-[18px] h-[18px] z-20 flex items-center justify-center text-[12px] opacity-0 scale-0 transition-all duration-200 [.nominal-card.active_&]:opacity-100 [.nominal-card.active_&]:scale-100">
+                <i class="ph-bold ph-check"></i>
+            </div>
+        </div>
+
+        <div class="nominal-card bg-card rounded-[15px] py-4 px-2.5 flex items-center justify-between border-[1.3px] border-transparent cursor-pointer relative z-10 transition-none [&.active]:border-white" onclick="selectCard(this, '11 Diamonds + 1 Bonus', 'Rp 3.651,00')">
+            <div class="flex items-center gap-[7px]">
+                <img src="diamond-mini.jpg" onerror="this.src='https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=50'" alt="Icon" class="w-[25px] h-[25px] object-cover">
+                <span class="text-[14px] font-medium">11 Diamonds + 1 Bonus</span>
+            </div>
+            <div class="text-right">
+                <div class="text-[13px] font-bold mb-[2px]">Rp 3.651,00</div>
+                <div class="text-[10px] text-green font-normal">10% Cashback</div>
+            </div>
+            <div class="absolute -top-[1px] -left-[1px] bg-yellow text-badge-bg border-r border-b border-l-2 border-t-2 border-white rounded-tl-[11px] rounded-br-[6px] w-[18px] h-[18px] z-20 flex items-center justify-center text-[12px] opacity-0 scale-0 transition-all duration-200 [.nominal-card.active_&]:opacity-100 [.nominal-card.active_&]:scale-100">
+                <i class="ph-bold ph-check"></i>
+            </div>
+        </div>
+        
+        <div class="nominal-card bg-card rounded-[15px] py-4 px-2.5 flex items-center justify-between border-[1.3px] border-transparent cursor-pointer relative z-10 transition-none [&.active]:border-white" onclick="selectCard(this, '15 Diamonds + 3 bonus', 'Rp 4.564,00')">
+            <div class="flex items-center gap-[7px]">
+                <img src="diamond-mini.jpg" onerror="this.src='https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=50'" alt="Icon" class="w-[25px] h-[25px] object-cover">
+                <span class="text-[14px] font-medium">15 Diamonds + 3 bonus</span>
+            </div>
+            <div class="text-right">
+                <div class="text-[13px] font-bold mb-[2px]">Rp 4.564,00</div>
+                <div class="text-[10px] text-green font-normal">10% Cashback</div>
+            </div>
+            <div class="absolute -top-[1px] -left-[1px] bg-yellow text-badge-bg border-r border-b border-l-2 border-t-2 border-white rounded-tl-[11px] rounded-br-[6px] w-[18px] h-[18px] z-20 flex items-center justify-center text-[12px] opacity-0 scale-0 transition-all duration-200 [.nominal-card.active_&]:opacity-100 [.nominal-card.active_&]:scale-100">
+                <i class="ph-bold ph-check"></i>
+            </div>
+        </div>        
+    </section>
+
+    <section class="py-5 px-4 bg-top flex-1 mt-5 mb-5">
+        <div class="bg-card rounded-[7px] p-5 relative overflow-hidden">
+            
+            <div class="mb-4">
+                <label class="block text-[12px] text-muted mb-2 font-semibold">Zone ID *</label>
+                <div class="relative">
+                    <input type="text" class="w-full bg-top border border-white/65 rounded-[4px] pt-2.5 pb-[14px] pr-10 pl-[14px] text-white text-[14px] outline-none transition-all duration-200 shadow-[inset_0_0_10px_rgba(0,0,0,0.3)] focus:border-white/40 focus:bg-[#4417ac]">
+                    <i class="ph ph-info absolute right-[7px] top-1/2 -translate-y-1/2 text-muted text-[23px] cursor-pointer"></i>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-[12px] text-muted mb-2 font-semibold">User ID *</label>
+                <div class="relative">
+                    <input type="text" class="w-full bg-top border border-white/65 rounded-[4px] pt-2.5 pb-[14px] pr-10 pl-[14px] text-white text-[14px] outline-none transition-all duration-200 shadow-[inset_0_0_10px_rgba(0,0,0,0.3)] focus:border-white/40 focus:bg-[#4417ac]">
+                </div>
+            </div>
+
+            <label class="flex items-center gap-3 mt-4 mb-6 cursor-pointer">
+                <input type="checkbox" checked id="rememberCheckbox" class="hidden">
+                <div class="w-5 h-5 bg-yellow rounded-[4px] flex items-center justify-center" id="checkboxVisual">
+                    <i class="ph-bold ph-check text-black text-[14px] font-bold"></i>
+                </div>
+                <span class="text-[14px] text-muted flex items-center gap-[6px]">Ingat saya <i class="ph ph-info"></i></span>
+            </label>
+
+            <div class="h-0 border-t border-dashed border-white/65 mb-5 relative before:content-[''] before:absolute before:top-1/2 before:-translate-y-1/2 before:w-[23px] before:h-[23px] before:bg-top before:rounded-full before:border before:border-dashed before:border-white/65 before:-left-[35px] after:content-[''] after:absolute after:top-1/2 after:-translate-y-1/2 after:w-[23px] after:h-[23px] after:bg-top after:rounded-full after:border after:border-dashed after:border-white/65 after:-right-[35px]"></div>
+
+            <div class="text-[18px] font-extrabold mb-1" id="summaryPrice">Rp 1.564,00</div>
+            <div class="flex items-center gap-[6px] text-green text-[12px] font-semibold mb-5">
+                <i class="ph-bold ph-arrows-clockwise"></i> 10% Cashback
+            </div>
+
+            <div class="bg-[#1c0942] rounded-[4px] py-[14px] px-4 flex items-center gap-3 mb-5">
+                <div class="w-5 h-5 rounded-full border-[1.5px] border-green flex items-center justify-center">
+                    <i class="ph-bold ph-check text-green text-[12px]"></i>
+                </div>
+                <span class="text-[14px] font-medium text-white" id="summaryTitle">5 Diamonds</span>
+            </div>
+
+            <button class="w-full p-3 border-none rounded-[4px] text-[16px] font-bold cursor-pointer flex items-center justify-center mb-3 transition-opacity duration-200 active:opacity-80 bg-white h-12 hidden">
+                <span class="font-sans italic font-extrabold text-[24px] tracking-[-1px]"><span class="text-[#003087]">Pay</span><span class="text-[#0079C1]">Pal</span></span>
+            </button>
+            <button class="w-full p-3 border-none rounded-[4px] text-[16px] font-bold cursor-pointer flex items-center justify-center mb-3 transition-opacity duration-200 active:opacity-80 bg-yellow text-black">Konfirmasi pesanan</button>
+
+            <div class="hidden items-center justify-center gap-2 mt-6 text-white text-[13px]">
+                <i class="ph-fill ph-lock-key text-green text-[18px]"></i>
+                <span>Pastikan formulir sudah sesuai</span>
+                <i class="ph ph-info"></i>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-card mt-0 flex flex-col">
+        <div class="flex bg-top mb-[30px]">
+            <div class="tab-item active flex-1 text-left p-4 text-[14px] font-semibold text-muted cursor-pointer transition-none border-r-0 [&.active]:bg-card [&.active]:text-white" onclick="switchTab('deskripsi', this)">Deskripsi produk</div>
+            <div class="tab-item flex-1 text-left p-4 text-[14px] font-semibold text-muted cursor-pointer transition-none border-r-0 [&.active]:bg-card [&.active]:text-white" onclick="switchTab('panduan', this)">Panduan top-up</div>
+        </div>
+        
+        <div class="pt-6 px-4 pb-0 relative" id="descTabBody">
+            
+            <div id="tab-deskripsi" class="tab-content block relative overflow-hidden max-h-[380px] transition-[max-height] duration-800 ease-[cubic-bezier(0.4,0,0.2,1)] [&.expanded]:max-h-[2500px] [&.expanded]:pb-6">
+                <h3 class="text-[16px] font-extrabold mb-4 text-white">ML Diamonds</h3>
+                <p class="text-[13px] leading-[1.6] text-muted mb-4 text-justify">
+                    Jika kamu menyukai game aksi yang sangat kompetitif dan serba cepat dan merasakan dorongan untuk menunjukkan bakat dan keterampilan bermain tim, maka MOBA Mobile Legends harus menjadi pilihanmu. Fakta luar biasanya adalah bahwa Mobile Legends Bang Bang adalah game gratis untuk dimainkan, tetapi perlu diingat bahwa ia memiliki bagian transaksi mikro.
+                </p>
+                <p class="text-[13px] leading-[1.6] text-muted mb-4 text-justify">
+                    Pernah ngerasa akun Mobile Legends kamu kurang greget karena belum punya hero atau skin impian? Di dunia Mobile Legends: Bang Bang, penampilan dan kekuatan itu penting banget. Biar kamu bisa bebas berekspresi dan memaksimalkan potensi akunmu, game ini nyediain beberapa jenis alat tukar yang punya fungsi masing-masing. Mulai dari beli hero baru biar gak bosen, upgrade emblem biar damage makin sakit, sampai koleksi skin yang bikin lawan kena mental duluan pas loading screen. Nah, buat dapetin itu semua, kamu pasti udah gak asing lagi sama yang namanya Ticket dan Battle Points (Gold). Dua mata uang dasar ini emang bisa kamu kumpulin secara gratis. Caranya cukup dengan rajin-rajin main, nyelesaiin misi harian, atau ikutan event tertentu. Tapi kita sama-sama tahu, ngumpulin Ticket dan Gold itu butuh waktu grinding dan kesabaran ekstra, apalagi kalau hero incaranku harganya lumayan mahal. Di sinilah Diamond Mobile Legends jadi penentu segalanya! Diamond adalah mata uang premium yang paling spesial dan berharga di Land of Dawn. Bisa dibilang, Diamond ini ibarat 'jalur VIP' yang bisa digunakan untuk hampir semua jenis transaksi di dalam game. Kamu gak perlu lagi capek nunggu berminggu-minggu; dengan Diamond, kamu bisa langsung ikut spin event eksklusif, beli Starlight Member bulanan, dapetin skin idaman, atau sekadar kirim gift ke teman mabar kamu. Singkatnya, kalau kamu mau menikmati seluruh fitur Mobile Legends secara maksimal dan instan, Diamond adalah kuncinya. Gak perlu bingung cari tempat top up yang terpercaya. Langsung aja isi ulang Diamond MLBB kamu di TopupClin! Prosesnya kilat, harganya aman di kantong, dan pastinya dijamin legal biar akun kesayanganmu tetap aman.
+                </p>
+                
+                <div class="read-more-wrapper absolute bottom-0 left-0 right-0 h-[100px] bg-gradient-to-b from-[#2c0d8300] via-card to-card flex items-end justify-center pb-4 transition-all duration-500 ease-in-out [.expanded_&]:relative [.expanded_&]:h-auto [.expanded_&]:bg-transparent [.expanded_&]:pb-0 [.expanded_&]:mt-4">
+                    <span class="text-white text-[12px] font-normal cursor-pointer" id="readMoreText" onclick="toggleDescription()">Baca selengkapnya</span>
+                </div>
+            </div>
+
+            <div id="tab-panduan" class="tab-content hidden relative overflow-hidden max-h-[380px] transition-[max-height] duration-800 ease-[cubic-bezier(0.4,0,0.2,1)] [&.active]:block [&.expanded]:max-h-[2500px] [&.expanded]:pb-6">
+                <h3 class="text-[16px] font-extrabold mb-4 text-white">Cara Top Up</h3>
+                <div class="mt-4 flex flex-col gap-4">
+                    <div class="flex items-start gap-[14px]">
+                        <div class="bg-yellow text-nav w-5 h-5 rounded-full flex items-center justify-center text-[13px] font-extrabold shrink-0">1</div>
+                        <div class="text-[13px] text-muted leading-[1.5] pt-[2px]">Pilih nominal diamond yang ingin kamu beli pada daftar di atas.</div>
+                    </div>
+                    <div class="flex items-start gap-[14px]">
+                        <div class="bg-yellow text-nav w-5 h-5 rounded-full flex items-center justify-center text-[13px] font-extrabold shrink-0">2</div>
+                        <div class="text-[13px] text-muted leading-[1.5] pt-[2px]">Masukkan <strong class="text-white">Zone ID</strong> dan <strong class="text-white">User ID</strong> Mobile Legends kamu di kolom yang tersedia.</div>
+                    </div>
+                    
+                    <img src="https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?auto=format&fit=crop&w=800&q=80" alt="Panduan User ID" class="w-full h-auto object-cover rounded-[4px] my-2 border border-white/10">
+                    
+                    <div class="flex items-start gap-[14px]">
+                        <div class="bg-yellow text-nav w-5 h-5 rounded-full flex items-center justify-center text-[13px] font-extrabold shrink-0">3</div>
+                        <div class="text-[13px] text-muted leading-[1.5] pt-[2px]">Pilih metode pembayaran (PayPal atau lainnya), lalu klik tombol <strong class="text-white">Beli sekarang</strong>.</div>
+                    </div>
+                    <div class="flex items-start gap-[14px]">
+                        <div class="bg-yellow text-nav w-5 h-5 rounded-full flex items-center justify-center text-[13px] font-extrabold shrink-0">4</div>
+                        <div class="text-[13px] text-muted leading-[1.5] pt-[2px]">Selesaikan pembayaran dan diamond akan langsung masuk ke akun Mobile Legends kamu secara otomatis!</div>
+                    </div>
+                </div>
+                 <div class="read-more-wrapper absolute bottom-0 left-0 right-0 h-[100px] bg-gradient-to-b from-[#2c0d8300] via-card to-card flex items-end justify-center pb-4 transition-all duration-500 ease-in-out [.expanded_&]:relative [.expanded_&]:h-auto [.expanded_&]:bg-transparent [.expanded_&]:pb-0 [.expanded_&]:mt-4">
+                    <span class="text-white text-[12px] font-normal cursor-pointer" id="readMoreGuideText" onclick="toggleGuide()">Baca selengkapnya</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="py-5 px-4 bg-top">
+        <h2 class="text-[14px] font-bold mb-[15px] text-white">Jelajahi game terkait</h2>
+        
+        <div class="flex flex-col gap-3">
+            <div class="bg-card border-0 border-cyan rounded-none flex justify-between p-3 relative overflow-hidden">
+                <div class="flex gap-4 flex-1">
+                    <div class="w-[100px] h-[125px] rounded-none overflow-hidden relative bg-black">
+                        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=200&q=80" alt="ML Diamonds" class="w-full h-full object-cover">
+                        <div class="absolute bottom-0 left-0 right-0 bg-black/70 flex items-center gap-1 py-1 px-[6px]">
+                            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/e/ee/Mobile_Legends_Bang_Bang_logo.png/220px-Mobile_Legends_Bang_Bang_logo.png" alt="logo" class="w-3 h-3">
+                            <span class="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis">Mobile Leg...</span>
+                        </div>
+                    </div>
+                    <div class="flex-1 flex flex-col">
+                        <p class="text-[12px] font-bold text-yellow mb-[5px]">DISKON</p>                     
+                        <h3 class="text-[14px] font-bold leading-[1.3] mb-[6px] text-white line-clamp-2">Mobile Legends: Bang Bang – 1 USD – 56 Diamonds Mdirect Ke...</h3>
+                        <div class="flex flex-col mb-0">
+                            <span class="text-[11px] text-white mt-[7px]">Mulai</span>
+                            <span class="text-[15px] font-extrabold">Rp 21.264,91</span>
+                            <span class="text-[11px] text-cyan font-semibold mt-1">10% Cashback</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col justify-between items-end">
+                    <div class="text-[20px] cursor-pointer opacity-1 text-transparent"><i class="ph ph-heart"></i></div>
+                    <div class="bg-cyan text-[#1a0847] w-7 h-7 flex items-center justify-center rounded-[3px] text-[18px] mb-0 cursor-pointer"><i class="ph ph-plus-circle"></i></div>
+                </div>
+            </div>
+            
+            <div class="bg-card border-0 border-cyan rounded-none flex justify-between p-3 relative overflow-hidden">
+                <div class="flex gap-4 flex-1">
+                    <div class="w-[100px] h-[125px] rounded-none overflow-hidden relative bg-black">
+                        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=200&q=80" alt="ML Diamonds" class="w-full h-full object-cover">
+                        <div class="absolute bottom-0 left-0 right-0 bg-black/70 flex items-center gap-1 py-1 px-[6px]">
+                            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/e/ee/Mobile_Legends_Bang_Bang_logo.png/220px-Mobile_Legends_Bang_Bang_logo.png" alt="logo" class="w-3 h-3">
+                            <span class="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis">Mobile Leg...</span>
+                        </div>
+                    </div>
+                    <div class="flex-1 flex flex-col">
+                        <p class="text-[12px] font-bold text-yellow mb-[5px]">DISKON</p>                  
+                        <h3 class="text-[14px] font-bold leading-[1.3] mb-[6px] text-white line-clamp-2">Mobile Legends: Bang Bang – 1 USD – 56 Diamonds Mdirect Ke...</h3>
+                        
+                        <div class="flex flex-col mb-0">
+                            <span class="text-[11px] text-white mt-[7px]">Mulai</span>
+                            <span class="text-[15px] font-extrabold">Rp 16.837,80</span>
+                            <span class="text-[11px] text-cyan font-semibold mt-1">10% Cashback</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col justify-between items-end">
+                    <div class="text-[20px] cursor-pointer opacity-1 text-transparent"><i class="ph ph-heart"></i></div>
+                    <div class="bg-cyan text-[#1a0847] w-7 h-7 flex items-center justify-center rounded-[3px] text-[18px] mb-0 cursor-pointer"><i class="ph ph-plus-circle"></i></div>
+                </div>
+            </div>
+
+            <div class="bg-card border-0 border-cyan rounded-none flex justify-between p-3 relative overflow-hidden">
+                <div class="flex gap-4 flex-1">
+                    <div class="w-[100px] h-[125px] rounded-none overflow-hidden relative bg-black">
+                        <div class="w-full h-full flex items-center justify-center bg-black">
+                            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/e/ee/Mobile_Legends_Bang_Bang_logo.png/220px-Mobile_Legends_Bang_Bang_logo.png" alt="MLBB Logo" class="w-[80%] h-auto">
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 bg-black/70 flex items-center gap-1 py-1 px-[6px]">
+                            <i class="ph ph-question text-[14px] text-white"></i>
+                            <span class="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis">Mdirect Mo...</span>
+                        </div>
+                    </div>
+                    <div class="flex-1 flex flex-col">
+                        <p class="text-[12px] font-bold text-yellow mb-[5px]">DISKON</p>                  
+                        <h3 class="text-[14px] font-bold leading-[1.3] mb-[6px] text-white line-clamp-2">Mobile Legends: Bang Bang – 1 USD – 56 Diamonds Mdirect Ke...</h3>
+                        <div class="flex flex-col mb-0">
+                            <span class="text-[11px] text-white mt-[7px]">Mulai</span>
+                            <span class="text-[15px] font-extrabold">Rp 18.208,32</span>
+                            <span class="text-[11px] text-cyan font-semibold mt-1">6% Cashback</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col justify-between items-end">
+                    <div class="text-[20px] cursor-pointer opacity-1 text-transparent"><i class="ph ph-heart"></i></div>
+                    <div class="bg-cyan text-[#1a0847] w-7 h-7 flex items-center justify-center rounded-[3px] text-[18px] mb-0 cursor-pointer"><i class="ph ph-plus-circle"></i></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="sheet-overlay absolute inset-0 bg-black/50 z-[997] opacity-0 pointer-events-none transition-opacity duration-400 [&.active]:opacity-100 [&.active]:pointer-events-auto"></div>
+
+    <div class="bottom-sheet-menu fixed bottom-0 left-0 w-full max-h-[50%] bg-nav rounded-t-none z-[998] translate-y-full transition-transform duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] flex flex-col overscroll-none [&.open]:translate-y-0">
+        <div class="overflow-y-auto py-6 px-4 flex flex-col gap-6 overscroll-contain hide-scroll">
+            
+            <div class="flex flex-col gap-3">
+                <div class="text-[15px] font-bold text-white">Games</div>
+                <div class="flex overflow-x-auto gap-3 pb-1 hide-scroll">
+                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-sword"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">MLBB</span></div>
+                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-crosshair"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">Free Fire</span></div>
+                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-sword"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">Genshin Imp.</span></div>
+                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-shield-chevron"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">PUBG M</span></div>
+                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-game-controller"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">Valorant</span></div>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-3">
+                <div class="text-[15px] font-bold text-white">Isi Pulsa</div>
+                <div class="flex overflow-x-auto gap-3 pb-1 hide-scroll">
+                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-device-mobile"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">Telkomsel</span></div>
+                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-device-mobile"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">Indosat</span></div>
+                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-device-mobile"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">XL / Axis</span></div>
+                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-device-mobile"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">Tri</span></div>
+                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-device-mobile"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">Smartfren</span></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="floating-all-btn fixed bottom-[10%] right-0 -translate-y-1/2 bg-top text-white p-[5px] rounded-tl-[10px] rounded-bl-[10px] shadow-[-4px_4px_12px_rgba(0,0,0,0.25)] border border-r-0 border-white z-[999] cursor-pointer flex items-center justify-center transition-all duration-600 ease-[cubic-bezier(0.4,0,0.2,1)] min-[421px]:right-[calc(50%-210px)] [&.active]:bg-nav [&.active]:pr-[30px] [&.active]:rounded-l-[30px] [&.active]:border-l [&.active]:border-b [&.active]:border-t [&.active]:border-white [&.active]:bottom-[44.7%]">
+        <i class="ph ph-squares-four text-[33px] transition-transform duration-800 [.floating-all-btn.active_&]:rotate-180"></i>
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
