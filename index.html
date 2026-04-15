@@ -3,658 +3,3834 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TopUpClin</title>
+    <title>PaperVoucher</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Original+Surfer&display=swap" rel="stylesheet">    
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
-    
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        nav: '#2a0b80',
-                        top: '#321199',
-                        bottom: '#5524d7',
-                        card: '#2c0d83',
-                        input: '#4417ac',
-                        summary: '#20085a',
-                        muted: 'rgba(255, 255, 255, 0.75)',
-                        'muted-dark': '#8a71d4',
-                        green: '#f8ce1a',
-                        yellow: '#f8ce1a',
-                        ribbon: '#471bb9',
-                        'badge-bg': '#291076',
-                        cyan: '#4ce5c1'
-                    },
-                    fontFamily: {
-                        sans: ['"IBM Plex Sans Condensed"', 'sans-serif'],
-                        surfer: ['"Original Surfer"', 'sans-serif']
-                    },
-                    keyframes: {
-                        flashAnim: {
-                            'from': { opacity: '1', transform: 'scale(1)' },
-                            'to': { opacity: '0.7', transform: 'scale(1.15)', textShadow: '0 0 10px #f8ce1a' }
-                        }
-                    },
-                    animation: {
-                        'flash': 'flashAnim 1s infinite alternate'
-                    }
-                }
-            }
-        }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <style>
-        /* Elemen dinamis & pseudo yang kompleks */
+    :root {
+    /* Color Palette - Paper News Concept */
+    --bg-nav: #e6e4d8; /* Warna kertas koran untuk header/navigasi */
+    --bg-top: #f5f4eb; /* Latar belakang utama ala kertas usang (cream) */
+    --bg-bottom: #dfddd1;
+    --bg-card: #ffffff; /* Latar blok konten putih bersih */
+    --bg-input: #ffffff;
+    --bg-summary: #dfddd1;
+    --pink: #b80000;
+    
+    /* Ubah hierarki teks putih menjadi gelap ala tinta cetak */
+    --text-white: #1a1a1a; /* Teks utama diubah menjadi hitam */
+    --text-muted: #595959; /* Abu-abu gelap untuk teks sekunder/deskripsi */
+    --text-muted-judul: #000000;           
+    --text-muted-dark: #333333; 
+    
+    /* Aksen (Merah "Breaking News" & Tinta Cetak) */
+    --color-green: #216124; 
+    --color-yellow: #c41e3a; /* Aksen utama (tombol/highlight) jadi merah koran */
+    --color-ribbon: #000000;
+    --color-badge-bg: #e6e4d8; /* Latar footer & elemen ulasan */
+    --badge-cyan: #0047ab; /* Biru tinta hyperlink cetak */           
+    --badge-null: #8a0303;              
+    
+    /* Sudut tajam ala kolom media cetak */
+    --border-radius-sm: 0px;
+    --border-radius-md: 0px; 
+    --border-radius-lg: 0px;
+    --border-radius-xl: 0px;
+   }
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'IBM Plex Sans Condensed', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #1a0847; /* Fallback desktop background */
+            display: flex;
+            justify-content: center;
+            color: var(--text-white);
+            
+        }
+
+        /* Mobile Container to simulate mobile view on desktop */
+        .app-container {
+            width: 100%;
+            max-width: 420px;
+            background-color: var(--bg-top);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* ================= HEADER ================= */
+        header {
+            background-color: var(--bg-nav);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 0px solid rgba(0,0,0,0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-left i {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Fake Eneba Logo swirl with CSS */
         .logo-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
             background: conic-gradient(from 180deg, #ffffff 0deg, #bda8f2 120deg, #3ad989 240deg, #ffffff 360deg);
             mask-image: radial-gradient(transparent 30%, black 35%);
             -webkit-mask-image: radial-gradient(transparent 30%, black 35%);
+            position: relative;
+            display: none;
         }
         .logo-icon::after {
-            content: ''; position: absolute; top: -2px; right: -2px; bottom: 50%; left: 50%; background: #2a0b80;
+            content: '';
+            position: absolute;
+            top: -2px; right: -2px; bottom: 50%; left: 50%;
+            background: var(--bg-nav);
         }
 
-        /* Menyembunyikan scrollbar */
-        .hide-scroll::-webkit-scrollbar { display: none; }
-        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
-
-        /* ================= ANIMASI SALJU MURNI ================= */
-        @keyframes snow-fall {
-            0% { transform: translateY(-10px) translateX(0); opacity: 0.8; }
-            100% { transform: translateY(200px) translateX(20px); opacity: 0; }
-        }
-        .snow-wrapper {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            overflow: hidden; pointer-events: none; z-index: 1;
-        }
-        .snowflake {
-            position: absolute; top: -10px; background: rgba(255, 255, 255, 0.8);
-            border-radius: 50%; pointer-events: none; animation: snow-fall linear infinite;
+        .logo-text {
+            font-weight: 800;
+            font-size: 20px;
+            letter-spacing: -0.5px;
+            color: var(--text-muted);
         }
 
-        /* ================= FLOATING BTN & BOTTOM SHEET ================= 
-           (Menggunakan Vanilla CSS asli milik lu agar animasi & posisinya 100% sempurna tanpa gangguan Tailwind) */
-        
-        .floating-all-btn {
-            position: fixed;
-            bottom: 10%;
-            right: 0;
-            transform: translateY(-50%);
-            background-color: #321199; /* var(--bg-top) */
-            color: #ffffff;
-            padding: 5px 5px 5px 5px;
-            border-top-left-radius: 10px;
-            border-bottom-left-radius: 10px;
-            box-shadow: -4px 4px 12px rgba(0, 0, 0, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.99);
-            border-right: none;
-            z-index: 999;
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .header-right i {
+            font-size: 24px;
             cursor: pointer;
+        }
+        
+        /* Banner Hero */
+        .hero {
+            width: 100%;
+            height: 230px;
+            position: relative;
+        }
+
+        .hero-banner {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+        }
+
+        /* Game Info Section */
+        .game-info {
+            display: flex;
+            padding: 0 16px;
+            position: relative;
+            z-index: 10;
+            background-color: var(--bg-card);
+        }
+
+.game-thumbnail {
+    margin-top: -50px;
+    flex-shrink: 0;
+    /* Tambahkan perspective di container untuk memberikan ruang 3D */
+    /*perspective: 500px; */
+}
+
+.game-thumbnail img {
+    width: 110px;
+    height: 125px;
+    border-radius: 0px;
+    object-fit: cover;
+    border: 0px solid var(--bg-body);
+    
+    /* Ini kunci efek "mau dibalik ke kanan" */
+    transform-origin: left center; /* Menahan sisi kiri agar tetap di tempat */
+  /*  transform: rotateY(28deg); Memutar sisi kanan ke arah dalam (belakang) */
+    
+    /* Sesuaikan shadow agar efek 3D makin realistis (bayangan jatuh ke kiri bawah) */
+    box-shadow: -7px 8px 15px rgba(0,0,0,0.4); /*00005*/ 
+    
+    /* Biar transisinya halus kalau mau ditambah efek hover nanti */
+    transition: transform 0.3s ease;
+}
+
+
+        .game-titles {
+            margin-top: 16px;
+            margin-left: 15px;
+        }
+
+        .game-titles h1 {
+            color: var(--text-white);
+            font-size: 15px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'original surfer';
+            opacity: 0.9;
+        }
+
+        .game-titles p {
+            color: var(--color-yellow);
+            opacity: .8;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        /* Features */
+        .features {
+            display: flex;
+            justify-content: space-between;
+            padding: 24px 16px 20px 16px;
+            background-color: var(--bg-card);
+            border-bottom: 0px solid #1a2335;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);/*#cbd5e1;*/
+        }
+
+        .feature-item i {
+            font-size: 14px;
+        }
+
+        .icon-lightning { color: #facc15; }
+        .icon-chat { color: #60a5fa; }
+        .icon-shield { color: #34d399; }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin: 16px 16px 16px; /*20 16 12*/
+        }
+        
+        /* ================= NOMINAL CARDS ================= */
+        .cards-container {
+            padding: 0 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .nominal-card {
+            background-color: var(--bg-card);
+            /*border-radius: var(--border-radius-md);*/
+            border-radius: 4px;
+            padding: 16px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1.3px solid transparent;
+            cursor: pointer;
+            position: relative;
+            transition: all 0s ease;
+            z-index: 10;
+            box-shadow: inset 0 0 10px rgba(000, 000, 000, 0.0);
+        }
+
+        .nominal-card.active {
+            border-color: var(--text-white);
+        }
+
+        /* Active Checkmark */
+        .active-check {
+            position: absolute;
+            top: -1px;
+            left: -1px; /*6px*/
+            background-color: var(--color-yellow); /*putih*/
+            color: var(--color-badge-bg); /*hijau*/
+            border-right: 1px solid white;
+            border-bottom: 1px solid white;
+            border-left: 2px solid white;
+            border-top: 2px solid white;
+            /*border-radius: 50%;*/
+            border-top-left-radius: 11px;
+            border-top-right-radius: 0px;
+            border-bottom-right-radius: 6px;
+            border-bottom-left-radius: 0px;
+            width: 18px;
+            height: 18px;
+            z-index: 20;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .floating-all-btn i {
-            font-size: 33px;
-            transition: transform 0.8s ease;
-        }
-        .floating-all-btn.active i {
-            transform: rotate(180deg);
-            transition: all 0.9s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .floating-all-btn.active {
-            background-color: #2a0b80; /* var(--bg-nav) */
-            padding-right: 30px;
-            border-bottom-left-radius: 30px;
-            border-top-left-radius: 30px;
-            border-top: 1px solid #fff;
-            border-left: 1px solid #fff;
-            border-bottom: 1px solid #fff;
-            bottom: 44.7%;
-        }
-        @media (min-width: 421px) {
-            .floating-all-btn {
-                right: calc(50% - 210px);
-            }
+            font-size: 12px;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.2s ease;
+            display: none;
         }
 
-        .sheet-overlay {
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.5); z-index: 997; opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
-        }
-        .sheet-overlay.active {
-            opacity: 1; pointer-events: auto;
+        .nominal-card.active .active-check {
+            opacity: 1;
+            transform: scale(1);
         }
 
-        .bottom-sheet-menu {
-            position: fixed; bottom: 0; left: 0; width: 100%; max-height: 50%;
-            background-color: #2a0b80; /* var(--bg-nav) */
-            border-top-left-radius: 0px; border-top-right-radius: 0px;
-            z-index: 998; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex; flex-direction: column; overscroll-behavior: none;
+        .card-left {
+            display: flex;
+            align-items: center;
+            gap: 7px;
         }
-        .bottom-sheet-menu.open {
-            transform: translateY(0);
+
+        .card-image {
+            width: 25px; /*32px*/
+            height: 25px; /*32px*/
+            border-radius: 0px;
+            object-fit: cover;
         }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .card-right {
+            text-align: right;
+        }
+
+        .card-price {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 2px;
+            color: var(--text-white);
+        }
+
+        .card-cashback {
+            font-size: 10px;
+            color: var(--color-yellow);
+            font-weight: 600;
+        }
+        .card-null {
+            font-size: 10px;
+            color: var(--badge-null);
+            font-weight: 400;
+        }        
+
+.form-section-container {
+    padding: 20px 16px; /*24px 16px*/
+    background-color: var(--bg-top);
+    flex: 1;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.checkout-card {
+    background-color: var(--bg-card); 
+    border-radius: var(--border-radius-md);
+    padding: 20px;
+    position: relative;
+    overflow: hidden; /* Tambahkan ini agar ujung lingkaran terpotong rapi membentuk setengah lingkaran , ditambahkan karena lingkaran agar bentuk voucher*/
+    /*box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);*/
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.form-input-wrapper {
+    position: relative;
+}
+
+.form-input {
+    width: 100%;
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: var(--border-radius-sm);
+    padding: 12px 40px 12px 12px;/*14 40 14 14*/
+    color: var(--text-white);
+    font-size: 12px;
+    outline: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    box-shadow: inset 0 0 6px rgba(000, 000, 000, 0.3);
+}
+
+.form-input:focus {
+    border-color: rgba(255, 255, 255, 0.65);
+    background-color: transparent;
+}
+
+/* Efek saat input kosong/error */
+.form-input.error-shake {
+    border-color: var(--pink); /* Menggunakan warna merah bawaanmu */
+    background-color: rgba(184, 0, 0, 0.05); /* Sedikit rona merah di background */
+    animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+/* Animasi Getar (Shake) */
+@keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+
+.info-icon {
+    position: absolute;
+    right: 7px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 23px;
+    cursor: pointer;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 130px;
+    margin-top: 16px;
+    margin-bottom: 24px;
+    cursor: pointer;
+}
+
+.checkbox-container input {
+    display: none;
+}
+
+.custom-checkbox {
+    width: 15px;
+    height: 15px;
+    background-color: var(--color-yellow);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-checkbox i {
+    color: #fff;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.checkbox-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Update divider kamu menjadi seperti ini */
+.divider {
+    height: 0; 
+   /* border-top: 1px dashed rgba(255, 255, 255, 0.65);*/
+   height: .4px;
+    background-color: var(--text-muted);
+    margin: 0 0 20px 0;
+    position: relative; /* Sangat penting agar lingkaran menempel pada garis ini */
+}
+
+/* Tambahkan ini di bawah class .divider */
+.divider::before,
+.divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 23px;
+    height: 23px;
+    background-color: var(--bg-top);
+    border-radius: 0%;
+    /*display: none;*/
+    border: 0px dashed rgba(255, 255, 255, 0.65);
+}
+
+.divider::before {
+    left: -35px; /* Menarik lingkaran tepat ke tepi kiri card */
+}
+
+.divider::after {
+    right: -35px; /* Menarik lingkaran tepat ke tepi kanan card */
+}
+
+
+
+/* Bagian Ringkasan (Harga & Item Terpilih) */
+.checkout-price {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+
+.checkout-cashback {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--color-green);
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+
+.selected-item-box {
+    background-color: var(--color-badge-bg); /* Warna sangat gelap sesuai referensi */
+    border-radius: var(--border-radius-sm);
+    padding: 11px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.circle-check {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid var(--text-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.circle-check i {
+    color: var(--text-white);
+    font-size: 12px;
+}
+
+.selected-item-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-white);
+}
+
+/* Tombol-tombol */
+.btn {
+    width: 100%;
+    padding: 11px; /*12px*/
+    border: none;
+    border-radius: var(--border-radius-sm);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    transition: opacity 0.2s ease;
+}
+
+.btn:active {
+    opacity: 0.8;
+}
+
+.btn-buy {
+    background-color: var(--color-yellow);
+    color: #fff;
+}
+
+/* Footer Aman */
+.safe-purchase {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 24px;
+    color: var(--text-muted);
+    font-size: 13px;
+    
+}
+
+.safe-purchase .ph-lock-key {
+    color: var(--color-yellow);
+    font-size: 15px;
+}
+
+/* ================= FLOATING ALL BUTTON ================= */
+.floating-all-btn {
+    /* Gunakan fixed agar selalu melayang di layar, 
+       atau absolute jika ingin menempel pada .app-container yang bergulir */
+    position: fixed; 
+    bottom: 10%; /*top: 50%;*/
+    right: 0;
+    transform: translateY(-50%);
+    
+    /* Styling Card ala Aplikasi */
+    background-color: var(--bg-top);
+    color: var(--text-white);
+    padding: 5px 5px 5px 5px;
+    border-top-left-radius: var(--border-radius-lg);
+    border-bottom-left-radius: var(--border-radius-lg);
+    box-shadow: -4px 4px 12px rgba(0, 0, 0, 0.25);
+    border: 0px solid rgba(255, 255, 255, 0.99);
+    border-right: none;
+    z-index: 999;
+    cursor: pointer;
+    
+    /* Efek Transisi */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.floating-all-btn i {
+    font-size: 33px;
+    transition: transform 0.8s ease; /*0.3s*/
+}
+
+.floating-all-btn.active i {
+    transform: rotate(180deg);
+    transition: all 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.floating-all-btn.active {
+    background-color: var(--bg-nav);
+    padding-right: 30px;
+    border-bottom-left-radius: 30px;
+    border-top-left-radius: 30px;
+    border-top: 0px solid #fff;
+    border-left: 0px solid #fff;
+    border-bottom: 0px solid #fff;
+    bottom: 44.7%; /*top: 50%;*/
+    /*transition: all 0.9s cubic-bezier(0.4, 0, 0.2, 1);*/
+}
+
+@media (min-width: 421px) {
+    .floating-all-btn {
+        right: calc(50% - 210px);
+    }
+}
+
+/* ================= BOTTOM SHEET MENU ================= */
+.sheet-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 997; /* Di bawah bottom sheet & floating btn */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+.sheet-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.bottom-sheet-menu {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    /* Maksimal tinggi 50vh agar tidak melebihi floating button di tengah layar */
+    max-height: 50%; /*50vh*/
+    background-color: var(--bg-nav);
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    /*box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.5);*/
+    z-index: 998; /* Di bawah floating btn (999) */
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    overscroll-behavior: none;
+}
+
+.bottom-sheet-menu.open {
+    transform: translateY(0);
+}
+
+.sheet-content {
+    overflow-y: auto;
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    overscroll-behavior: contain;
+}
+
+/* Sembunyikan scrollbar vertikal utama untuk tampilan lebih bersih */
+.sheet-content::-webkit-scrollbar { width: 0; }
+
+.sheet-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sheet-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-white);
+}
+
+/* Kontainer scroll horizontal untuk Card per kategori */
+.horizontal-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    padding-bottom: 4px;
+    scrollbar-width: none; /* Firefox */
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+.item-card {
+    background-color: var(--bg-nav);
+    border-radius: var(--border-radius-md);
+    padding: 12px;
+    min-width: 85px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.05);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.item-card:active {
+    background-color: var(--bg-top);
+}
+
+.item-card img, .item-card .icon-placeholder {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+/* Placeholder jika tidak menggunakan gambar url */
+.item-card .icon-placeholder {
+    background-color: var(--bg-top);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: var(--color-yellow);
+}
+
+.item-card span {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+/* ================= DESKRIPSI & PANDUAN TABS ================= */
+.description-section {
+    background-color: var(--bg-nav);
+    margin-top: 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+.tabs-header {
+    display: flex;
+    background-color: var(--bg-top); /* Warna lebih gelap untuk tab tidak aktif */
+    margin-bottom: 30px;
+}
+
+.tab-item {
+    flex: 1;
+    text-align: center;
+    padding: 16px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0s ease; /*0.2s*/
+    border-right: none;
+}
+
+.tab-item.active {
+    background-color: var(--bg-nav);
+    color: var(--text-white);
+}
+
+.tab-body {
+    padding: 24px 16px 0px 16px;
+    position: relative;
+    /*overflow: hidden;*/
+    /*max-height: 380px; Batasan tinggi sebelum di-expand */
+}
+
+.desc-title {
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 16px;
+    color: var(--text-white);
+}
+
+.desc-text {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    text-align: justify;
+}
+
+/* Efek gradient/fade untuk menutupi teks bagian bawah */
+.read-more-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background: linear-gradient(to bottom, rgba(44, 13, 131, 0) 0%, var(--bg-card) 70%, var(--bg-card) 100%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 160px;
+}
+
+.read-more-text {
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+/* State saat deskripsi terbuka penuh */
+.tab-body.expanded {
+    max-height: none; /* Menghilangkan batasan tinggi */
+    padding-bottom: 24px;
+}
+
+.tab-body.expanded .read-more-wrapper {
+    position: relative; /* Mengembalikan posisi ke aliran normal */
+    height: auto;
+    background: transparent; /* Menghilangkan gradient */
+    padding-bottom: 0;
+    margin-top: 16px;
+}
+
+/* ================= TABS LOGIC & CONTENT ================= */
+.tab-content {
+    display: none;
+    position: relative;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Penyesuaian batas tinggi khusus untuk tab deskripsi */
+#tab-deskripsi, #tab-panduan {
+    overflow: hidden;
+    max-height: 430px; /*380px*/
+    /* Tambahan efek transisi biar kaya tirai turun/naik */
+    transition: max-height 0.8s cubic-bezier(0.4, 0, 0.2, 1); 
+}
+
+#tab-deskripsi.expanded, #tab-panduan.expanded {
+    max-height: 2500px; /* Cukup besar untuk nampung semua isi teks lo */
+    padding-bottom: 24px;
+}
+
+.read-more-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background: linear-gradient(to bottom, rgba(44, 13, 131, 0) 0%, var(--bg-card) 70%, var(--bg-card) 100%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 16px;
+    transition: all 0.5s ease-in-out; /* Transisi transparan */
+}
+
+
+#tab-deskripsi.expanded .read-more-wrapper,
+#tab-panduan.expanded .read-more-wrapper {
+    position: relative;
+    height: auto;
+    background: transparent;
+    padding-bottom: 0;
+    margin-top: 16px;
+}
+
+/* ================= PANDUAN TOP-UP STYLES ================= */
+.guide-list {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.guide-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.step-number {
+    background-color: var(--text-white);
+    color: var(--bg-nav);
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.step-text {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    padding-top: 0px;
+}
+
+.step-text strong {
+    color: var(--text-white);
+}
+
+/* Ganti .guide-banner lama dengan ini untuk menjaga rasio asli gambar */
+.guide-img-responsive {
+    width: 100%;
+    height: auto;
+    border-radius: var(--border-radius-sm);
+    margin-top: 12px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: block;
+    object-fit: contain;
+}
+
+/* Garis pemisah antar tutorial */
+.guide-divider {
+    border: none;
+    border-top: 1px dashed rgba(255, 255, 255, 0.15);
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+
+#tab-ulasan {
+    overflow: hidden;
+    max-height: 2500px;
+    padding: 30px 16px;
+    border-radius: 0px;
+    margin-bottom: 20px;
+    background-color: var(--bg-top);
+}
+.review-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+.rating-big {
+    font-size: 46px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--text-white);
+}
+.rating-big i {
+    color: var(--color-yellow);
+}
+.rating-big .out-of {
+    font-size: 20px;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-top: 10px;
+}
+.rating-subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-top: 8px;
+}
+.rating-subtitle strong {
+    color: var(--text-white);
+}
+.rating-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+    border-bottom: 1px dashed #999;
+    padding-bottom: 24px;
+}
+.bar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text-white);
+    font-weight: 600;
+}
+.bar-row i {
+    color: var(--color-yellow);
+}
+.bar-track {
+    flex: 1;
+    height: 10px;
+    background-color: var(--text-white);
+    border-radius: var(--border-radius-xl);
+    overflow: hidden;
+}
+.bar-fill {
+    height: 100%;
+    background-color: var(--color-yellow);
+    border-radius: var(--border-radius-xl);
+}
+.bar-count {
+    width: 35px;
+    text-align: right;
+    font-weight: 400;
+    font-size: 14px;
+    color: var(--text-muted);
+}
+.review-item {
+    border-bottom: 1px dashed #999;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.review-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.reviewer-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-white);
+}
+.review-stars {
+    display: flex;
+    gap: 2px;
+    color: var(--color-yellow);
+    font-size: 14px;
+}
+.review-meta-sub {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.review-product {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+.review-date {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+.review-text {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 4px;
+}
+.btn-outline-review {
+    width: 100%;
+    background-color: transparent;
+    border: 0px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-white);
+    /*padding: 14px;*/
+    border-radius: var(--border-radius-md);
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    justify-content: center; /*flex-end*/
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+
+/* ================= RECOMMENDED SECTION ================= */
+.recommendation-section {
+    padding: 50px 16px 30px;
+    background-color: var(--bg-top);
+}
+
+.rec-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: black;
+}
+
+.rec-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.rec-card {
+    background-color: var(--bg-card); /*240b6e*/
+    border: .3px solid var(--badge-cyan);
+    border-radius: 0px; /*6px*/
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.rec-content {
+    display: flex;
+    gap: 16px;
+    flex: 1;
+}
+
+.rec-img-wrapper {
+    width: 100px;
+    height: 125px;
+    border-radius: 0px;
+    overflow: hidden;
+    position: relative;
+    background-color: #000;
+}
+
+.rec-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.dark-overlay-logo {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+}
+
+.dark-overlay-logo img {
+    width: 80%;
+    height: auto;
+}
+
+.rec-img-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 6px;
+    color: white;
+}
+
+.rec-img-label img {
+    width: 12px;
+    height: 12px;
+}
+
+.rec-img-label i {
+    font-size: 14px;
+    color: #fff;
+}
+
+.rec-img-label span {
+    font-size: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rec-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.rec-product-name {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 6px;
+    color: var(--text-muted-dark);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.rec-region {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-yellow); /* Pink magenta */
+    
+    
+    margin-bottom: 5px; /*12px*/
+}
+
+.region-ph { color: var(--color-yellow); }
+.region-global-alt { color: var(--color-yellow); } /* Hijau toska */
+
+.rec-price-box {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0px;
+}
+
+.rec-label-mulai {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 7px;
+    font-weight: 600;
+}
+
+.rec-price {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--text-muted);
+}
+
+.rec-cashback {
+    font-size: 11px;
+    color: var(--badge-cyan); /*3ad989*/
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+.rec-stats {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #bda8f2;
+    display: none;
+}
+
+.rec-actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.action-btn {
+    color: rgba(255, 255, 255, 0.0);
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.action-btn.add-cart {
+    background-color: var(--color-yellow);
+    color: var(--bg-top);
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2px;
+    font-size: 18px;
+    margin-bottom: 0px;
+}
+
+.cart-btn-large {
+    border: 1.5px solid #fff;
+    padding: 8px 12px;
+    border-radius: 2px;
+    margin-top: auto;
+}
+
+.cart-btn-large i {
+    font-size: 22px;
+    color: #fff;
+}
+
+/* Detail spesifik wishlist icon di kanan atas */
+.wishlist {
+    opacity: 1;
+}
+/* Hapus overflow: hidden dari sini agar logo tidak terpotong */
+.has-snow {
+    position: relative;
+}
+
+/* Ini adalah wadah baru khusus untuk salju (dibuat otomatis oleh JS nanti) */
+.snow-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Salju akan dipotong di sini, bukan di section utama */
+    pointer-events: none;
+    z-index: 1;
+    display: none;
+}
+
+/* Partikel Salju */
+.snowflake {
+    position: absolute;
+    top: -10px;
+    background: grey;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: snow-fall linear infinite;
+}
+
+/* Pastikan konten asli tetap di atas salju */
+.game-thumbnail, 
+.game-titles, 
+.feature-item {
+    position: relative;
+    z-index: 2; 
+}
+
+/* Animasi jatuh */
+@keyframes snow-fall {
+    0% {
+        transform: translateY(-10px) translateX(0);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(200px) translateX(20px);
+        opacity: 0;
+    }
+}
+/* ================= FLASH SALE SECTION ================= */
+.flash-sale-section {
+    padding: 16px 0 0px 0;
+    background-color: transparent;
+    /*display: none;*/
+}
+
+.flash-sale-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+    margin-bottom: 12px;
+}
+
+.flash-sale-title {
+    font-size: 13px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--color-yellow);
+    text-transform: uppercase;
+    font-family: 'Original Surfer', sans-serif;
+    margin-bottom: -5px;
+}
+
+.flash-sale-title i {
+    font-size: 16px;
+    animation: flashAnim 1s infinite alternate;
+}
+
+@keyframes flashAnim {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0.7; transform: scale(1.15); text-shadow: 0 0 10px var(--color-yellow); }
+}
+
+.countdown-timer {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: -8px;
+    font-family: 'Original Surfer', sans-serif;
+}
+
+.time-box {
+    background-color: transparent; /* Warna merah untuk efek urgensi */
+    color: var(--pink);
+    /*padding: 3px 6px;*/
+    border-radius: var(--border-radius-sm);
+    box-shadow: 0 2px 4px rgba(239, 68, 68, 0.0);
+}
+
+.flash-sale-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    padding: 0 16px 20px 16px;
+    scrollbar-width: none; /* Firefox */
+}
+
+.flash-sale-scroll::-webkit-scrollbar {
+    display: none; /* Chrome & Safari */
+}
+
+.flash-sale-card {
+    min-width: 135px;
+    background-color: var(--bg-card);
+    border: 0px solid rgba(248, 206, 26, 0.25);
+    border-radius: var(--border-radius-md);
+    padding: 10px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.flash-sale-card:active {
+    transform: scale(0.97);
+}
+
+.fs-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #ef4444;
+    color: white;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 1px 3px;
+    border-bottom-left-radius: var(--border-radius-md);
+    border-top-right-radius: var(--border-radius-md);
+    z-index: 2;
+}
+
+.fs-img-wrapper {
+    width: 100%;
+    height: 75px;
+    border-radius: var(--border-radius-sm);
+    overflow: hidden;
+    background-color: #1a0847;
+}
+
+.fs-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.fs-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.fs-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-white);
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.fs-price-old {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-decoration: line-through;
+    margin-bottom: 5px;
+}
+
+.fs-price-new {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--badge-cyan);
+    margin-bottom: 8px;
+}
+
+.fs-stock-container {
+    width: 100%;
+    background-color: #1111;
+    height: 4px;
+    border-radius: 0px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 4px;
+}
+
+.fs-stock-bar {
+    height: 100%;
+    /*background: linear-gradient(90deg, #ef4444, var(--color-yellow));*/
+    background-color: var(--color-yellow);
+    border-radius: 0px;
+}
+
+.fs-stock-text {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-align: right;
+    font-weight: 600;
+}
+
+/* ================= CMS CONTENT STYLES ================= */
+.cms-content {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-muted);
+    text-align: justify;
+}
+
+.cms-content p {
+    margin-bottom: 16px;
+}
+
+.cms-content h3 {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text-muted-judul);
+    margin-bottom: 16px;
+    margin-top: 0;
+}
+
+.cms-content h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted-judul);
+    margin-bottom: 8px;
+    margin-top: 16px;
+}
+
+.cms-content ul, .cms-content ol {
+    padding-left: 20px;
+    margin-bottom: 16px;
+}
+
+.cms-content li {
+    margin-bottom: 6px;
+}
+
+.cms-content strong {
+    color: var(--text-muted);
+}
+
+/* Jika nanti di editor kamu menambahkan link */
+.cms-content a {
+    color: var(--color-yellow);
+    text-decoration: none;
+}
+/* ================= PRODUCT CATEGORY TABS ================= */
+.product-category-tabs {
+    display: flex;
+    overflow-x: auto;
+    gap: 7px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 16px;
+    padding-right: 16px;
+    margin-bottom: 16px;
+    scrollbar-width: none;
+}
+.product-category-tabs::-webkit-scrollbar {
+    display: none;
+}
+.cat-tab {
+    background-color: var(--bg-card);
+    border: 0px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-muted);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 16px;
+    padding-right: 16px;
+    border-radius: var(--border-radius-xl);
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0s ease;
+}
+.cat-tab.active {
+    background-color: var(--color-yellow);
+    color: #fff;
+    border-color: var(--color-yellow);
+}
+.tab-category-content {
+    display: none;
+}
+.tab-category-content.active {
+    display: flex;
+}
+
+/*modal overlay disetting lewat backend*/
+.review-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+.review-modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+.review-modal-card {
+    background-color: var(--bg-nav);
+    width: 100%;
+    max-width: 360px;
+    border-radius: var(--border-radius-md);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(20px);
+    transition: transform 0.3s;
+}
+.review-modal-overlay.active .review-modal-card {
+    transform: translateY(0);
+}
+.rm-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+.rm-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-white);
+}
+.rm-close {
+    font-size: 20px;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+.rm-product-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: var(--bg-top);
+    padding: 12px;
+    border-radius: var(--border-radius-sm);
+    margin-bottom: 20px;
+}
+.rm-product-info img {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+}
+.rm-product-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-white);
+}
+.rm-transaction-id {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+.rm-rating-input {
+    display: flex;
+    justify-content: flex-start;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.star-input {
+    font-size: 32px;
+    color: var(--text-muted-dark);
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.star-input.active {
+    color: var(--color-yellow);
+}
+
+/* Quick tags rata kiri */
+.rm-quick-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+    justify-content: flex-start; /* Rata kiri menyatu dengan teks atasnya */
+}
+
+/* Kaku ala kertas / cetak */
+.quick-tag {
+    background-color: var(--bg-top);
+    border: .1px dashed var(--text-muted-dark); /* Border putus-putus ala sobekan kupon */
+    color: var(--text-muted);
+    padding: 6px 14px;
+    border-radius: 0px; /* Sudut tajam kaku, no melengkung-melengkung */
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0s ease; /* Transisi 0s agar lebih terasa brutal/kaku saat diklik */
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.quick-tag:active {
+    transform: scale(0.97);
+}
+
+.quick-tag.active {
+    background-color: var(--bg-nav);
+    color: var(--text-white); /* Teks jadi hitam tinta */
+    border: .1px solid var(--color-yellow); /* Garis solid dan tegas */
+}
+
+.rm-comment-box {
+    margin-bottom: 20px;
+}
+.rm-textarea {
+    width: 100%;
+    background-color: var(--bg-top);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--border-radius-sm);
+    padding: 12px;
+    color: var(--text-white);
+    font-size: 13px;
+    resize: none;
+    outline: none;
+}
+.rm-textarea:focus {
+    border-color: rgba(255, 255, 255, 0.5);
+}
+.rm-submit {
+    margin-bottom: 0;
+}
+
+/* ================= GIFT CARD SECTION ================= */
+.gift-card-section {
+    padding: 20px 16px 30px;
+    background-color: var(--bg-top); /* Menggunakan warna dasar nav sesuai gambarmu */
+}
+
+.gc-header {
+    margin-bottom: 16px;
+}
+
+.gc-title-main {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-white);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.gc-title-main i {
+    font-size: 16px;
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.gc-container {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+    padding-bottom: 8px;
+}
+
+.gc-container::-webkit-scrollbar {
+    display: none; /* Chrome & Safari */
+}
+
+.gc-card {
+    min-width: 125px;
+    height: 170px;
+    border-radius: 0px; /* Di gambar ujungnya lancip/kotak */
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: #1a0847;
+    flex-shrink: 0;
+}
+
+/* Overlay gelap agar gambar/teks lebih kontras */
+.gc-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+    transition: background 0.3s ease;
+}
+
+.gc-card:hover::before,
+.gc-card:active::before {
+    background: rgba(0, 0, 0, 0.75); /* Makin gelap saat disentuh agar tulisan jelas */
+}
+
+.gc-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+/* Teks pengganti Logo sebelum di-hover */
+.gc-logo-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    font-size: 20px;
+    font-weight: 800;
+    color: #fff;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    display: none;
+}
+
+.gc-card:hover .gc-logo-text,
+.gc-card:active .gc-logo-text {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+}
+
+/* Kontainer untuk Judul dan Deskripsi yang muncul */
+.gc-hover-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    z-index: 3;
+    transform: translateY(100%); /* Sembunyikan di bawah */
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Animasi smooth naik */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.gc-card:hover .gc-hover-content,
+.gc-card:active .gc-hover-content {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Format Judul: Maksimal 1 baris */
+.gc-hover-title {
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Format Deskripsi: Maksimal 2 baris */
+.gc-hover-desc {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Batas 2 baris */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Tombol Tampilkan Semua */
+.gc-footer {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+}
+
+.btn-outline-gc {
+    background: transparent;
+    border: 1px solid var(--text-white);
+    color: var(--text-muted);
+    padding: 10px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 0px; /* Kotak sesuai referensi gambar */
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-outline-gc:hover,
+.btn-outline-gc:active {
+    background: #fff;
+    color: var(--bg-nav);
+}
+
+/* ================= FOOTER ================= */
+.main-footer {
+    background-color: var(--bg-bottom); /* Warna gelap menyesuaikan gambar referensi */
+    padding: 80px 16px 120px 16px; /* Padding bawah ekstra untuk menghindari tertutup floating button */
+    color: #cbd5e1;
+    font-size: 13px;
+    line-height: 1.6;
+    border-top: 0px solid rgba(255, 255, 255, 0.65);
+}
+
+.footer-desc {
+    margin-bottom: 24px;
+    color: var(--text-muted-judul);
+}
+
+.footer-title {
+    color: var(--text-muted-judul); /* Warna pink magenta sesuai gambar */
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.footer-section {
+    margin-bottom: 24px;
+}
+
+/* --- Newsletter --- */
+.newsletter-box {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.newsletter-input {
+    flex: 1;
+    background-color: transparent;
+    border: 1px solid var(--text-muted-judul);
+    border-radius: var(--border-radius-sm);
+    padding: 12px;
+    color: var(--text-white);
+    font-size: 13px;
+    outline: none;
+    transition: border 0.2s;
+}
+
+.newsletter-input:focus {
+    border-color: var(--color-yellow);
+}
+
+.newsletter-btn {
+    background-color: var(--text-white); /*e83a82*/
+    color: #fff;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    padding: 0 16px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- Kotak Pembayaran Aman --- */
+.payment-box {
+    border: 1px dashed var(--text-muted-judul);
+    border-radius: var(--border-radius-md);
+    padding: 16px;
+    margin-bottom: 24px;
+}
+
+.payment-logos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.pay-logo-wrapper {
+    background-color: var(--bg-top);
+    border-radius: 0px;
+    padding: 4px 12px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pay-logo-wrapper img {
+    height: 14px;
+    max-width: 60px;
+    object-fit: contain;
+}
+
+.more-payment {
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* --- Tombol WhatsApp --- */
+.wa-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: transparent; /* Warna box gelap kemerahan seperti gambar */
+    border: 1px solid var(--text-white);
+    color: var(--text-muted-judul);
+    text-decoration: none;
+    padding: 14px 16px;
+    border-radius: var(--border-radius-md);
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    transition: opacity 0.2s;
+}
+
+.wa-btn:active {
+    opacity: 0.8;
+}
+
+.wa-btn i {
+    color: #34d399; /* Hijau logo WA */
+    font-size: 22px;
+}
+
+.contact-info p {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    color: var(--text-muted);
+}
+
+.contact-info i {
+    font-size: 16px;
+}
+
+/* --- Jaminan Transaksi --- */
+.footer-subtext {
+    margin-bottom: 8px;
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.legal-text {
+    color: var(--color-yellow);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* --- Grid Menu Link --- */
+.footer-links-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.footer-link-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-link-col li {
+    margin-bottom: 12px;
+}
+
+.footer-link-col a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.footer-link-col a:hover {
+    color: #34d399;
+}
+
+/* ================= INFO MODAL STYLES ================= */
+.info-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+.info-modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.info-modal-card {
+    background-color: var(--bg-nav);
+    width: 100%;
+    max-width: 360px;
+    border-radius: var(--border-radius-md);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(20px);
+    transition: transform 0.3s;
+}
+
+.info-modal-overlay.active .info-modal-card {
+    transform: translateY(0);
+}
+
+.info-modal-body {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 24px;
+    text-align: justify;
+}
+
+.info-modal-body strong {
+    color: var(--text-white);
+}
+
+.info-tutorial-img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--border-radius-sm);
+    margin-bottom: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    object-fit: contain;
+}
+/* ================= EFEK STEMPEL LINGKARAN PRODUK GANGGUAN (SVG) ================= */
+.stamp-circular {
+    position: absolute;
+    top: 50%;
+    left: 89%;
+    transform: translate(-50%, -50%) rotate(-17deg); /* Miring otentik ala stempel */
+    width: 55px; /* Ukuran stempel kecil agar muat di dalam card */
+    height: 55px;
+    z-index: 15;
+    pointer-events: none; /* Jangan halangi klik card utama */
+    color: #c41e3a; /* Merah cetak senada dengan warna aksen */
+}
+
+/* Lingkaran Luar Tebal */
+.stamp-outer-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 2px solid #c41e3a;
+    border-radius: 50%;
+    opacity: 0.9;
+}
+
+/* Lingkaran Dalam Tipis */
+.stamp-inner-ring {
+    position: absolute;
+    top: 15%; /* Jarak dari lingkaran luar */
+    left: 15%;
+    width: 70%;
+    height: 70%;
+    border: 1.5px solid #c41e3a;
+    border-radius: 50%;
+    opacity: 0.9;
+}
+
+/* Kontainer Teks SVG agar selaras dengan miring stempel */
+.stamp-text-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Menyelaraskan teks SVG */
+.stamp-text-container svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+/* Gaya Teks SVG */
+.stamp-text-container svg text {
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    fill: #c41e3a; /* Warna merah cetak */
+    font-weight: 800;
+}
+
+/* Ikon Kecil di Tengah (Perisai Tanda Tanya) */
+.icon-center {
+    font-size: 20px; /* Ukuran ikon tengah kecil */
+    opacity: 0.9;
+    transform: translateY(-3px); /* Sedikit naik agar teks bawah terlihat */
+}
+
+/* Membuat card terlihat non-aktif visual */
+.nominal-card.gangguan {
+    opacity: 0.4; /*0.35px Lebih redup */
+    pointer-events: none; /* Mematikan fungsi klik (onclick) */
+    position: relative;
+    box-shadow: none; /* Hapus bayangan agar terlihat datar */
+}
+
+/* Menambahkan overlay pola garis-garis silang untuk tanda non-aktif */
+.nominal-card.gangguan::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.1) 0, rgba(255, 255, 255, 0.1) 1px, transparent 0, transparent 5px);
+    z-index: 1; /* Di atas isi card, di bawah stempel */
+    opacity: 0.7;
+}
+
+/* ================= AFFILIATE GEAR SECTION ================= */
+.affiliate-section {
+    padding: 30px 16px;
+    background-color: var(--bg-nav); /* Warna kertas usang bagian bawah */
+    border-top: 1.5px solid var(--text-muted-dark);
+}
+
+.aff-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.aff-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text-white);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    font-family: 'Original Surfer', sans-serif;
+}
+
+.aff-title i {
+    color: var(--color-yellow); /* Merah cetak koran */
+    font-size: 20px;
+}
+
+.aff-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    padding-bottom: 8px;
+    scrollbar-width: none; /* Firefox */
+}
+
+.aff-scroll::-webkit-scrollbar {
+    display: none; /* Chrome & Safari */
+}
+
+.aff-card {
+    min-width: 140px;
+    background-color: var(--bg-card);
+    border: 1px solid var(--text-muted-dark); /* Garis tegas ala kolom koran */
+    border-radius: var(--border-radius-sm); /* Sudut tajam 0px */
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.aff-img-wrapper {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    position: relative;
+    overflow: hidden;
+    background-color: var(--bg-top);
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+.aff-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Badge Platform (Shopee/TikTok) */
+.aff-badge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 3px 6px;
+    font-size: 10px;
+    font-weight: 800;
+    color: #fff;
+    z-index: 2;
+    text-transform: uppercase;
+}
+
+.aff-badge.shopee { background-color: #ee4d2d; }
+.aff-badge.tiktok { background-color: #000000; }
+
+.aff-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: space-between;
+}
+
+.aff-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-white);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+/* Teks Harga Estimasi */
+.aff-price-hint {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--color-yellow);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.aff-btn {
+    display: block;
+    width: 100%;
+    background-color: transparent;
+    border: 1px solid var(--text-white);
+    color: var(--text-white);
+    text-align: center;
+    padding: 8px 0;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.aff-btn:active {
+    background-color: var(--text-white);
+    color: var(--bg-card);
+}
+
+/* ================= PAYMENT MODAL BENTO GRID ================= */
+.payment-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1005; /* Harus lebih tinggi dari elemen lain */
+    display: flex;
+    align-items: center; /* Posisi melayang di tengah (Popup) */
+    justify-content: center;
+    padding: 16px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.payment-modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.payment-modal-card {
+    background-color: var(--bg-top);
+    width: 100%;
+    max-width: 380px;
+    border: 1.5px solid var(--text-muted-dark);
+    border-radius: 0px; /* Sudut tajam ala kertas */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.95);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /*box-shadow: -6px 6px 0px rgba(0, 0, 0, 0.0); Efek bayangan brutalism/retro */
+}
+
+.payment-modal-overlay.active .payment-modal-card {
+    transform: scale(1);
+}
+
+.pm-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--text-muted-dark);
+    padding-bottom: 12px;
+}
+
+.pm-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text-white);
+    text-transform: uppercase;
+    
+}
+
+.pm-close {
+    font-size: 24px;
+    color: var(--text-muted-dark);
+    cursor: pointer;
+}
+
+/* --- BENTO GRID LAYOUT --- */
+.pm-bento-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.pm-bento-item {
+    background-color: var(--bg-card);
+    border: 1px solid var(--text-muted-dark);
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    position: relative;
+    text-align: center;
+    transition: all 0.1s ease;
+}
+
+.pm-bento-item:active {
+    transform: scale(0.97);
+}
+
+.pm-bento-item.full-width {
+    grid-column: span 2;
+    flex-direction: row;
+    justify-content: flex-start;
+    text-align: left;
+    padding: 16px;
+}
+
+/* State Aktif Metode Pembayaran */
+.pm-bento-item.active {
+    border: 1px solid var(--color-yellow);
+    background-color: var(--bg-nav);
+}
+
+.pm-logo {
+    height: 18px;
+    max-width: 80px;
+    object-fit: contain;
+}
+
+.pm-icon-default {
+    font-size: 28px;
+    color: var(--text-muted-dark);
+}
+
+.pm-bento-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-white);
+}
+
+.pm-bento-desc {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.pm-bento-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.pm-bento-icon {
+    font-size: 32px;
+    color: var(--text-muted-dark);
+    margin-right: 12px;
+}
+
+/* Pita Penanda Aktif ala Cetak */
+.pm-check {
+    position: absolute;
+    top: -1px; right: -1px;
+    background-color: var(--color-yellow);
+    color: #fff;
+    padding: 3px 8px;
+    font-size: 10px;
+    font-weight: 800;
+    display: none;
+    border-bottom-left-radius: 0px;
+}
+
+.pm-bento-item.active .pm-check {
+    display: block;
+}
+
+/* --- SUMMARY PESANAN (Rincian Bawah) --- */
+.pm-summary {
+    background-color: var(--bg-nav); /* Warna dasar koran */
+    border: 1px dashed var(--text-muted-dark);
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.pm-summary-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.pm-summary-img {
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+    border: 1.5px solid var(--text-muted-dark);
+}
+
+.pm-summary-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.pm-summary-title {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.pm-summary-item {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--text-white);
+}
+
+.pm-summary-price {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--color-yellow); /* Merah cetak */
+    text-align: right;
+}
+
+.pm-submit {
+    margin-bottom: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1.5px solid var(--color-yellow);
+}
+
+/* ================= EXPANDABLE SUMMARY ================= */
+.pm-summary {
+    position: relative; /* Wajib agar elemen child bisa absolute terhadap div ini */
+}
+
+.pm-summary-toggle {
+    position: absolute;
+    top: -14px; /* Setengah dari tinggi kotak agar pas di tengah garis dashed */
+    right: 14px; /*46% Posisinya tepat di atas jumlah nominal harga */
+    width: 26px;
+    height: 26px;
+    background-color: var(--bg-top); 
+    border: 1px dashed var(--text-muted-dark); /* Garis tegas ala kertas */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.2s ease;
+}
+
+.pm-summary-toggle i {
+    font-size: 14px;
+    color: var(--text-white);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Efek saat diklik (icon berputar) */
+.pm-summary.open .pm-summary-toggle i {
+    transform: rotate(180deg);
+}
+
+.pm-summary-toggle:active {
+    background-color: var(--text-muted-dark);
+}
+.pm-summary-toggle:active i {
+    color: var(--bg-nav);
+}
+
+/* Konten rincian yang meluas ke atas */
+.pm-expanded-content {
+    position: absolute;
+    bottom: 100%; /* Muncul merambat ke atas menutupi metode bayar */
+    left: -1px; /* Menyesuaikan border */
+    width: calc(100% + 2px);
+    background-color: var(--bg-nav);
+    border: 1px dashed var(--text-muted-dark);
+    border-bottom: none; /* Menyatu dengan kotak utama di bawahnya */
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 5;
+    
+    /* Animasi Smooth */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pm-summary.open .pm-expanded-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.pm-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    border-bottom: 1px dotted rgba(0,0,0,0.1);
+    padding-bottom: 6px;
+}
+.pm-detail-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.pm-detail-row .detail-label {
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.pm-detail-row .detail-value {
+    color: var(--text-white);
+    font-weight: 700;
+}
+
+
+/* ================= CUSTOM TOAST ================= */
+.custom-toast {
+    position: fixed;
+    top: -100px; /* Sembunyikan di luar layar atas */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 380px;
+    background-color: var(--color-yellow); /* Menggunakan warna merah aksen kamu */
+    color: #ffffff;
+    padding: 14px 16px;
+    border-radius: var(--border-radius-sm); /* Mengikuti sudut tajam 0px */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    z-index: 2000; /* Harus paling atas melebihi modal */
+    box-shadow: 0 8px 16px rgba(196, 30, 58, 0.2);
+    transition: top 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Class ini akan ditambahkan oleh JS untuk memunculkan notifikasi */
+.custom-toast.show {
+    top: 20px;
+}
+
+.custom-toast i {
+    font-size: 20px;
+}
+
     </style>
 </head>
-<body class="bg-[#1a0847] flex justify-center text-white font-sans antialiased [-webkit-tap-highlight-color:transparent]">
+<body>
 
-<div class="w-full max-w-[420px] bg-top min-h-screen flex flex-col relative overflow-x-hidden">
-    
-    <header class="bg-nav flex items-center justify-between p-4 sticky top-0 z-[1000]">
-        <div class="flex items-center gap-4">
-            <div class="flex items-center gap-[6px]">
-                <div class="logo-icon w-6 h-6 rounded-full relative"></div>
-                <span class="font-extrabold text-[20px] tracking-tight">TopupClin</span>
+<div class="app-container">
+  <div id="customToast" class="custom-toast">
+    <i class="ph-fill ph-warning-circle"></i>
+    <span id="toastMessage">Pesan error di sini</span>
+</div>
+
+    <header>
+        <div class="header-left">
+            <div class="logo-container">
+                <div class="logo-icon"></div>
+                <span class="logo-text">PaperVoucher</span>
             </div>
         </div>
-        <div class="flex items-center gap-[14px] text-[24px] cursor-pointer">
+        <div class="header-right">
             <i class="ph ph-magnifying-glass"></i>
-            <i class="ph ph-user"></i>
+            <i class="ph ph-bell"></i>
             <i class="ph ph-list"></i>          
         </div>
     </header>
     
-    <section class="w-full h-[220px] relative">
-        <img class="w-full h-full object-cover object-top" src="baner.jpg" onerror="this.src='https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop'" alt="Hero Banner">
-    </section>
+        <section class="hero">
+            <img class="hero-banner" src="baner.jpg" alt="Hero Banner">
+        </section>
 
-    <section class="flex px-4 relative z-10 bg-card has-snow">
-        <div class="mt-[-50px] shrink-0 [perspective:500px] relative z-[2]">
-            <img src="game.jpg" onerror="this.src='https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=1974&auto=format&fit=crop'" alt="Game Icon" class="w-[140px] h-[130px] rounded-[18px] object-cover origin-left [transform:rotateY(28deg)] shadow-[-8px_8px_15px_rgba(0,0,0,0.5)] transition-transform duration-300">
-        </div>
-        <div class="mt-4 -ml-[9px] relative z-[2]">
-            <h1 class="text-white text-[15px] font-extrabold uppercase tracking-[0.5px] font-surfer opacity-90">MOBILE LEGENDS (ALL REGION)</h1>
-            <p class="text-yellow opacity-80 text-[13px] font-semibold mt-1">Moonton</p>
-        </div>
-    </section>
+        <section class="game-info has-snow">
+            <div class="game-thumbnail">
+                <img src="game.jpg" alt="Game Icon">
+            </div>
+            <div class="game-titles">
+                <h1>MOBILE LEGENDS (ALL REGION)</h1>
+                <p>Moonton</p>
+            </div>
+        </section>
 
-    <section class="flex justify-between px-4 pt-6 pb-5 bg-card relative has-snow border-b-0 border-[#1a2335]">
-        <div class="flex items-center gap-[6px] text-[11px] font-semibold text-slate-300 relative z-[2]">
-            <i class="ph-fill ph-lightning text-yellow-400 text-[14px]"></i> Proses Cepat
-        </div>
-        <div class="flex items-center gap-[6px] text-[11px] font-semibold text-slate-300 relative z-[2]">
-            <i class="ph-fill ph-chat-circle-dots text-blue-400 text-[14px]"></i> Layanan Chat 24/7
-        </div>
-        <div class="flex items-center gap-[6px] text-[11px] font-semibold text-slate-300 relative z-[2]">
-            <i class="ph-fill ph-shield-check text-emerald-400 text-[14px]"></i> Pembayaran Aman!
-        </div>
-    </section>
+        <section class="features has-snow">
+            <div class="feature-item">
+                <i class="ph-fill ph-lightning icon-lightning"></i>
+                Proses Cepat
+            </div>
+            <div class="feature-item">
+                <i class="ph-fill ph-chat-circle-dots icon-chat"></i>
+                Layanan Chat 24/7
+            </div>
+            <div class="feature-item">
+                <i class="ph-fill ph-shield-check icon-shield"></i>
+                Pembayaran Aman!
+            </div>
+        </section>
 
-    <section class="pt-4 pb-0 bg-transparent">
-        <div class="flex justify-between items-center px-4 mb-3">
-            <h2 class="text-[13px] font-extrabold flex items-center gap-[6px] text-yellow uppercase font-surfer -mb-1">
-                Flash Sale <i class="ph-fill ph-lightning text-[16px] animate-flash"></i>
-            </h2>
-            <div class="flex gap-1 items-center text-[12px] font-bold -mb-2 font-surfer text-yellow">
-                <span class="rounded-sm shadow-none" id="fs-hours">02</span> / 
-                <span class="rounded-sm shadow-none" id="fs-mins">15</span> / 
-                <span class="rounded-sm shadow-none" id="fs-secs">45</span>
+    <section class="flash-sale-section">
+        <div class="flash-sale-header">
+            <h2 class="flash-sale-title">Flash Sale</h2>
+            <div class="countdown-timer">
+                <span class="time-box" id="fs-hours">02</span> / 
+                <span class="time-box" id="fs-mins">15</span> / 
+                <span class="time-box" id="fs-secs">45</span>
             </div>
         </div>
         
-        <div class="flex overflow-x-auto gap-2.5 px-4 pb-5 hide-scroll">
-            <div class="min-w-[135px] bg-card rounded-[7px] p-2.5 relative flex flex-col gap-2 cursor-pointer transition-transform active:scale-95 border-0 border-[rgba(248,206,26,0.25)]">
-                <div class="absolute top-0 right-0 bg-red-500 text-white text-[11px] font-extrabold py-[1px] px-[3px] rounded-bl-[7px] rounded-tr-[7px] z-10">-50%</div>
-                <div class="w-full h-[75px] rounded-[4px] overflow-hidden bg-[#1a0847]">
-                    <img src="game.jpg" onerror="this.src='https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=1974&auto=format&fit=crop'" alt="86 Diamonds" class="w-full h-full object-cover">
+        <div class="flash-sale-scroll">
+            <div class="flash-sale-card">
+                <div class="fs-badge">-50%</div>
+                <div class="fs-img-wrapper">
+                    <img src="game.jpg" alt="86 Diamonds">
                 </div>
-                <div class="flex flex-col">
-                    <h4 class="text-[12px] font-bold text-white mb-[2px] whitespace-nowrap overflow-hidden text-ellipsis">86 Diamonds</h4>
-                    <span class="text-[9px] text-muted line-through mb-[5px]">Rp 25.000</span>
-                    <span class="text-[12px] font-extrabold text-yellow mb-2">Rp 12.500</span>
-                    <div class="w-full bg-white/10 h-1 relative mb-1">
-                        <div class="h-full bg-gradient-to-r from-red-500 to-yellow w-[15%]"></div>
+                <div class="fs-info">
+                    <h4 class="fs-title">86 Diamonds</h4>
+                    <span class="fs-price-old">Rp 25.000</span>
+                    <span class="fs-price-new">Rp 12.500</span>
+                    <div class="fs-stock-container">
+                        <div class="fs-stock-bar" style="width: 15%;"></div>
                     </div>
-                    <span class="text-[10px] text-muted text-right font-semibold">Tersisa 15</span>
+                    <span class="fs-stock-text">Tersisa 15</span>
                 </div>
             </div>
 
-            <div class="min-w-[135px] bg-card rounded-[7px] p-2.5 relative flex flex-col gap-2 cursor-pointer transition-transform active:scale-95 border-0 border-[rgba(248,206,26,0.25)]">
-                <div class="absolute top-0 right-0 bg-red-500 text-white text-[11px] font-extrabold py-[1px] px-[3px] rounded-bl-[7px] rounded-tr-[7px] z-10">-30%</div>
-                <div class="w-full h-[75px] rounded-[4px] overflow-hidden bg-[#1a0847]">
-                    <img src="game.jpg" onerror="this.src='https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=1974&auto=format&fit=crop'" alt="172 Diamonds" class="w-full h-full object-cover">
+            <div class="flash-sale-card">
+                <div class="fs-badge">-30%</div>
+                <div class="fs-img-wrapper">
+                    <img src="game.jpg" alt="172 Diamonds">
                 </div>
-                <div class="flex flex-col">
-                    <h4 class="text-[12px] font-bold text-white mb-[2px] whitespace-nowrap overflow-hidden text-ellipsis">172 Diamonds</h4>
-                    <span class="text-[9px] text-muted line-through mb-[5px]">Rp 50.000</span>
-                    <span class="text-[12px] font-extrabold text-yellow mb-2">Rp 35.000</span>
-                    <div class="w-full bg-white/10 h-1 relative mb-1">
-                        <div class="h-full bg-gradient-to-r from-red-500 to-yellow w-[45%]"></div>
+                <div class="fs-info">
+                    <h4 class="fs-title">172 Diamonds</h4>
+                    <span class="fs-price-old">Rp 50.000</span>
+                    <span class="fs-price-new">Rp 35.000</span>
+                    <div class="fs-stock-container">
+                        <div class="fs-stock-bar" style="width: 45%;"></div>
                     </div>
-                    <span class="text-[10px] text-muted text-right font-semibold">Tersisa 10</span>
+                    <span class="fs-stock-text">Tersisa 10</span>
                 </div>
             </div>
 
-            <div class="min-w-[135px] bg-card rounded-[7px] p-2.5 relative flex flex-col gap-2 cursor-pointer transition-transform active:scale-95 border-0 border-[rgba(248,206,26,0.25)]">
-                <div class="absolute top-0 right-0 bg-red-500 text-white text-[11px] font-extrabold py-[1px] px-[3px] rounded-bl-[7px] rounded-tr-[7px] z-10">-40%</div>
-                <div class="w-full h-[75px] rounded-[4px] overflow-hidden bg-[#1a0847]">
-                    <img src="game.jpg" onerror="this.src='https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=1974&auto=format&fit=crop'" alt="257 Diamonds" class="w-full h-full object-cover">
+            <div class="flash-sale-card">
+                <div class="fs-badge">-40%</div>
+                <div class="fs-img-wrapper">
+                    <img src="game.jpg" alt="257 Diamonds">
                 </div>
-                <div class="flex flex-col">
-                    <h4 class="text-[12px] font-bold text-white mb-[2px] whitespace-nowrap overflow-hidden text-ellipsis">257 Diamonds</h4>
-                    <span class="text-[9px] text-muted line-through mb-[5px]">Rp 75.000</span>
-                    <span class="text-[12px] font-extrabold text-yellow mb-2">Rp 45.000</span>
-                    <div class="w-full bg-white/10 h-1 relative mb-1">
-                        <div class="h-full bg-gradient-to-r from-red-500 to-yellow w-[80%]"></div>
+                <div class="fs-info">
+                    <h4 class="fs-title">257 Diamonds</h4>
+                    <span class="fs-price-old">Rp 75.000</span>
+                    <span class="fs-price-new">Rp 45.000</span>
+                    <div class="fs-stock-container">
+                        <div class="fs-stock-bar" style="width: 80%;"></div>
                     </div>
-                    <span class="text-[10px] text-muted text-right font-semibold">Tersisa 20</span>
+                    <span class="fs-stock-text">Tersisa 20</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <h2 class="text-[13px] font-bold mx-4 mb-3 mt-0">Pilih Produk *</h2>
+
+    <h2 class="section-title">Pilih Produk *</h2>
     
-    <section class="px-4 flex flex-col gap-2.5">
-        <div class="nominal-card active bg-card rounded-[15px] py-4 px-2.5 flex items-center justify-between border-[1.3px] border-transparent cursor-pointer relative z-10 transition-none [&.active]:border-white" onclick="selectCard(this, '5 Diamonds', 'Rp 1.564,00')">
-            <div class="flex items-center gap-[7px]">
-                <img src="diamond-mini.jpg" onerror="this.src='https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=50'" alt="Icon" class="w-[25px] h-[25px] object-cover">
-                <span class="text-[14px] font-medium">5 Diamonds</span>
+    <div class="product-category-tabs">
+        <div class="cat-tab active" onclick="switchCategory('diamond', this)">Diamonds</div>
+        <div class="cat-tab" onclick="switchCategory('weekly', this)">Weekly Pass</div>
+        <div class="cat-tab" onclick="switchCategory('starlight', this)">Membership</div>
+    </div>
+
+    <section class="cards-container tab-category-content active" id="cat-diamond">
+        <div class="nominal-card gangguan" onclick="selectCard(this, '5 Diamonds', 'Rp 1.564,00')">
+            
+            <div class="stamp-circular">
+                <div class="stamp-outer-ring"></div>
+                <div class="stamp-inner-ring"></div>
+                <div class="stamp-text-container">
+                    
+                    <svg viewBox="0 0 100 100">
+                        <defs>
+                            <path id="upperPath" d="M 12 50 a 38 38 0 1 1 76 0" fill="none" />
+                            <path id="lowerPath" d="M 12 50 a 38 38 0 1 0 76 0" fill="none" />
+                        </defs>
+                        
+<text font-family="'IBM Plex Sans Condensed', sans-serif" font-size="10" text-anchor="middle" dy="1">
+    <textPath xlink:href="#upperPath" startOffset="50%">
+        PRODUK
+    </textPath>
+</text>
+
+<text font-family="'IBM Plex Sans Condensed', sans-serif" font-size="12" text-anchor="middle" dy="7">
+    <textPath xlink:href="#lowerPath" startOffset="50%">
+        GANGGUAN
+    </textPath>
+</text>
+
+
+                    </svg>
+                    
+                    <i class="ph ph-shield-question icon-center"></i>
+                </div>
             </div>
-            <div class="text-right">
-                <div class="text-[13px] font-bold mb-[2px]">Rp 1.564,00</div>
-                <div class="text-[10px] text-green font-normal">10% Cashback</div>
+
+            <div class="card-left">
+                <img src="diamond-mini.jpg" alt="Icon" class="card-image">
+                <span class="card-title">55 Diamonds + 50 bonus</span>
             </div>
-            <div class="absolute -top-[1px] -left-[1px] bg-yellow text-badge-bg border-r border-b border-l-2 border-t-2 border-white rounded-tl-[11px] rounded-br-[6px] w-[18px] h-[18px] z-20 flex items-center justify-center text-[12px] opacity-0 scale-0 transition-all duration-200 [.nominal-card.active_&]:opacity-100 [.nominal-card.active_&]:scale-100">
+            <div class="card-right">
+                <div class="card-price">Rp 1.564,00</div>
+              
+            </div>
+            <div class="active-check">
                 <i class="ph-bold ph-check"></i>
             </div>
         </div>
 
-        <div class="nominal-card bg-card rounded-[15px] py-4 px-2.5 flex items-center justify-between border-[1.3px] border-transparent cursor-pointer relative z-10 transition-none [&.active]:border-white" onclick="selectCard(this, '11 Diamonds + 1 Bonus', 'Rp 3.651,00')">
-            <div class="flex items-center gap-[7px]">
-                <img src="diamond-mini.jpg" onerror="this.src='https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=50'" alt="Icon" class="w-[25px] h-[25px] object-cover">
-                <span class="text-[14px] font-medium">11 Diamonds + 1 Bonus</span>
+
+        <div class="nominal-card" onclick="selectCard(this, '11 Diamonds + 1 Bonus', 'Rp 3.651,00')">
+            <div class="card-left">
+                <img src="diamond-mini.jpg" alt="Icon" class="card-image">
+                <span class="card-title">11 Diamonds + 1 Bonus</span>
             </div>
-            <div class="text-right">
-                <div class="text-[13px] font-bold mb-[2px]">Rp 3.651,00</div>
-                <div class="text-[10px] text-green font-normal">10% Cashback</div>
+            <div class="card-right">
+                <div class="card-price">Rp 3.651,00</div>
+                <div class="card-cashback">7% Cashback</div>               
             </div>
-            <div class="absolute -top-[1px] -left-[1px] bg-yellow text-badge-bg border-r border-b border-l-2 border-t-2 border-white rounded-tl-[11px] rounded-br-[6px] w-[18px] h-[18px] z-20 flex items-center justify-center text-[12px] opacity-0 scale-0 transition-all duration-200 [.nominal-card.active_&]:opacity-100 [.nominal-card.active_&]:scale-100">
+            <div class="active-check">
                 <i class="ph-bold ph-check"></i>
             </div>
         </div>
         
-        <div class="nominal-card bg-card rounded-[15px] py-4 px-2.5 flex items-center justify-between border-[1.3px] border-transparent cursor-pointer relative z-10 transition-none [&.active]:border-white" onclick="selectCard(this, '15 Diamonds + 3 bonus', 'Rp 4.564,00')">
-            <div class="flex items-center gap-[7px]">
-                <img src="diamond-mini.jpg" onerror="this.src='https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=50'" alt="Icon" class="w-[25px] h-[25px] object-cover">
-                <span class="text-[14px] font-medium">15 Diamonds + 3 bonus</span>
+        <div class="nominal-card" onclick="selectCard(this, '15 Diamonds + 3 bonus', 'Rp 4.564,00')">
+            <div class="card-left">
+                <img src="diamond-mini.jpg" alt="Icon" class="card-image">
+                <span class="card-title">15 Diamonds + 3 bonus</span>
             </div>
-            <div class="text-right">
-                <div class="text-[13px] font-bold mb-[2px]">Rp 4.564,00</div>
-                <div class="text-[10px] text-green font-normal">10% Cashback</div>
+            <div class="card-right">
+                <div class="card-price">Rp 4.564,00</div>
+                <div class="card-cashback">10% Cashback</div>
             </div>
-            <div class="absolute -top-[1px] -left-[1px] bg-yellow text-badge-bg border-r border-b border-l-2 border-t-2 border-white rounded-tl-[11px] rounded-br-[6px] w-[18px] h-[18px] z-20 flex items-center justify-center text-[12px] opacity-0 scale-0 transition-all duration-200 [.nominal-card.active_&]:opacity-100 [.nominal-card.active_&]:scale-100">
+            <div class="active-check">
                 <i class="ph-bold ph-check"></i>
             </div>
         </div>        
     </section>
 
-    <section class="py-5 px-4 bg-top flex-1 mt-5 mb-5">
-        <div class="bg-card rounded-[7px] p-5 relative overflow-hidden">
-            
-            <div class="mb-4">
-                <label class="block text-[12px] text-muted mb-2 font-semibold">Zone ID *</label>
-                <div class="relative">
-                    <input type="text" class="w-full bg-top border border-white/65 rounded-[4px] pt-2.5 pb-[14px] pr-10 pl-[14px] text-white text-[14px] outline-none transition-all duration-200 shadow-[inset_0_0_10px_rgba(0,0,0,0.3)] focus:border-white/40 focus:bg-[#4417ac]">
-                    <i class="ph ph-info absolute right-[7px] top-1/2 -translate-y-1/2 text-muted text-[23px] cursor-pointer"></i>
-                </div>
+    <section class="cards-container tab-category-content" id="cat-weekly">
+        <div class="nominal-card" onclick="selectCard(this, 'Weekly Diamond Pass', 'Rp 27.500,00')">
+            <div class="card-left">
+                <img src="diamond-mini.jpg" alt="Icon" class="card-image">
+                <span class="card-title">Weekly Diamond Pass</span>
             </div>
-
-            <div class="mb-4">
-                <label class="block text-[12px] text-muted mb-2 font-semibold">User ID *</label>
-                <div class="relative">
-                    <input type="text" class="w-full bg-top border border-white/65 rounded-[4px] pt-2.5 pb-[14px] pr-10 pl-[14px] text-white text-[14px] outline-none transition-all duration-200 shadow-[inset_0_0_10px_rgba(0,0,0,0.3)] focus:border-white/40 focus:bg-[#4417ac]">
-                </div>
+            <div class="card-right">
+                <div class="card-price">Rp 27.500,00</div>
             </div>
-
-            <label class="flex items-center gap-3 mt-4 mb-6 cursor-pointer">
-                <input type="checkbox" checked id="rememberCheckbox" class="hidden">
-                <div class="w-5 h-5 bg-yellow rounded-[4px] flex items-center justify-center" id="checkboxVisual">
-                    <i class="ph-bold ph-check text-black text-[14px] font-bold"></i>
-                </div>
-                <span class="text-[14px] text-muted flex items-center gap-[6px]">Ingat saya <i class="ph ph-info"></i></span>
-            </label>
-
-            <div class="h-0 border-t border-dashed border-white/65 mb-5 relative before:content-[''] before:absolute before:top-1/2 before:-translate-y-1/2 before:w-[23px] before:h-[23px] before:bg-top before:rounded-full before:border before:border-dashed before:border-white/65 before:-left-[35px] after:content-[''] after:absolute after:top-1/2 after:-translate-y-1/2 after:w-[23px] after:h-[23px] after:bg-top after:rounded-full after:border after:border-dashed after:border-white/65 after:-right-[35px]"></div>
-
-            <div class="text-[18px] font-extrabold mb-1" id="summaryPrice">Rp 1.564,00</div>
-            <div class="flex items-center gap-[6px] text-green text-[12px] font-semibold mb-5">
-                <i class="ph-bold ph-arrows-clockwise"></i> 10% Cashback
-            </div>
-
-            <div class="bg-[#1c0942] rounded-[4px] py-[14px] px-4 flex items-center gap-3 mb-5">
-                <div class="w-5 h-5 rounded-full border-[1.5px] border-green flex items-center justify-center">
-                    <i class="ph-bold ph-check text-green text-[12px]"></i>
-                </div>
-                <span class="text-[14px] font-medium text-white" id="summaryTitle">5 Diamonds</span>
-            </div>
-
-            <button class="w-full p-3 border-none rounded-[4px] text-[16px] font-bold cursor-pointer flex items-center justify-center mb-3 transition-opacity duration-200 active:opacity-80 bg-white h-12 hidden">
-                <span class="font-sans italic font-extrabold text-[24px] tracking-[-1px]"><span class="text-[#003087]">Pay</span><span class="text-[#0079C1]">Pal</span></span>
-            </button>
-            <button class="w-full p-3 border-none rounded-[4px] text-[16px] font-bold cursor-pointer flex items-center justify-center mb-3 transition-opacity duration-200 active:opacity-80 bg-yellow text-black">Konfirmasi pesanan</button>
-
-            <div class="hidden items-center justify-center gap-2 mt-6 text-white text-[13px]">
-                <i class="ph-fill ph-lock-key text-green text-[18px]"></i>
-                <span>Pastikan formulir sudah sesuai</span>
-                <i class="ph ph-info"></i>
+            <div class="active-check">
+                <i class="ph-bold ph-check"></i>
             </div>
         </div>
     </section>
 
-    <section class="bg-card mt-0 flex flex-col">
-        <div class="flex bg-top mb-[30px]">
-            <div class="tab-item active flex-1 text-left p-4 text-[14px] font-semibold text-muted cursor-pointer transition-none border-r-0 [&.active]:bg-card [&.active]:text-white" onclick="switchTab('deskripsi', this)">Deskripsi produk</div>
-            <div class="tab-item flex-1 text-left p-4 text-[14px] font-semibold text-muted cursor-pointer transition-none border-r-0 [&.active]:bg-card [&.active]:text-white" onclick="switchTab('panduan', this)">Panduan top-up</div>
+    <section class="cards-container tab-category-content" id="cat-starlight">
+        <div class="nominal-card" onclick="selectCard(this, 'Starlight Member', 'Rp 145.000,00')">
+            <div class="card-left">
+                <img src="diamond-mini.jpg" alt="Icon" class="card-image">
+                <span class="card-title">Starlight Member</span>
+            </div>
+            <div class="card-right">
+                <div class="card-price">Rp 145.000,00</div>
+            </div>
+            <div class="active-check">
+                <i class="ph-bold ph-check"></i>
+            </div>
         </div>
-        
-        <div class="pt-6 px-4 pb-0 relative" id="descTabBody">
-            
-<div id="tab-deskripsi" class="tab-content block relative overflow-hidden max-h-[380px] transition-[max-height] duration-800 ease-[cubic-bezier(0.4,0,0.2,1)] [&.expanded]:max-h-[2500px] [&.expanded]:pb-6">
-    
-    <h3 class="text-[16px] font-extrabold mb-3 text-white">Top Up Diamond Mobile Legends (ML)</h3>
-    <p class="text-[13px] leading-[1.6] text-muted mb-5 text-justify">
-        Jika kamu menyukai game aksi kompetitif MOBA yang serba cepat, <strong>Mobile Legends: Bang Bang</strong> adalah pilihan yang tepat! Bebaskan ekspresimu dan maksimalkan potensi akunmu di Land of Dawn tanpa batas.
-    </p>
+    </section>
 
-    <h4 class="text-[14px] font-bold mb-3 text-white flex items-center gap-2 border-l-[3px] border-yellow pl-2">
-        Mengapa Butuh Diamond?
-    </h4>
-    <p class="text-[13px] leading-[1.6] text-muted mb-3 text-justify">
-        Meski <em>Ticket</em> dan <em>Battle Points (Gold)</em> bisa didapatkan gratis lewat misi, mengumpulkan keduanya butuh waktu (<em>grinding</em>) ekstra. Di sinilah <strong>Diamond</strong> hadir sebagai jalur VIP dan mata uang premium paling berharga untuk:
-    </p>
-    
-    <ul class="text-[13px] text-muted mb-5 flex flex-col gap-2.5">
-        <li class="flex items-start gap-2">
-            <i class="ph-fill ph-check-circle text-yellow text-[16px] shrink-0 mt-[2px]"></i>
-            <span class="leading-[1.5]"><strong>Beli Hero & Skin Impian:</strong> Bikin lawan kena mental duluan saat di <em>loading screen</em>.</span>
-        </li>
-        <li class="flex items-start gap-2">
-            <i class="ph-fill ph-check-circle text-yellow text-[16px] shrink-0 mt-[2px]"></i>
-            <span class="leading-[1.5]"><strong>Gacha & Spin Event:</strong> Ikuti event eksklusif secara instan tanpa nunggu lama.</span>
-        </li>
-        <li class="flex items-start gap-2">
-            <i class="ph-fill ph-check-circle text-yellow text-[16px] shrink-0 mt-[2px]"></i>
-            <span class="leading-[1.5]"><strong>Starlight Member:</strong> Nikmati berbagai <em>benefit</em> bulanan dan skin eksklusifnya.</span>
-        </li>
-        <li class="flex items-start gap-2">
-            <i class="ph-fill ph-check-circle text-yellow text-[16px] shrink-0 mt-[2px]"></i>
-            <span class="leading-[1.5]"><strong>Kirim Gift:</strong> Berbagi item, tiket, atau skin idaman dengan teman mabar kesayangan.</span>
-        </li>
-    </ul>
 
-    <h4 class="text-[14px] font-bold mb-3 text-white flex items-center gap-2 border-l-[3px] border-yellow pl-2">
-        Top Up Murah & Aman
-    </h4>
-    <p class="text-[13px] leading-[1.6] text-muted mb-4 text-justify">
-        Gak perlu bingung cari tempat top up! Isi ulang Diamond MLBB kamu di <strong>TopupClin</strong> sekarang juga. Prosesnya dijamin <strong>kilat</strong>, harganya <strong>aman di kantong</strong>, dan 100% <strong>legal</strong> agar akun kesayanganmu selalu terjamin keamanannya.
-    </p>
-    
-    <div class="read-more-wrapper absolute bottom-0 left-0 right-0 h-[100px] bg-gradient-to-b from-[#2c0d8300] via-card to-card flex items-end justify-center pb-4 transition-all duration-500 ease-in-out [.expanded_&]:relative [.expanded_&]:h-auto [.expanded_&]:bg-transparent [.expanded_&]:pb-0 [.expanded_&]:mt-4">
-        <span class="text-white text-[12px] font-normal cursor-pointer bg-top px-4 py-1.5 rounded-full border border-white/10 shadow-lg" id="readMoreText" onclick="toggleDescription()">Baca selengkapnya</span>
+    <section class="cards-container tab-category-content active" id="cat-diamond">
+        </section>
+
+    <section class="cards-container tab-category-content" id="cat-weekly">
+        <div class="nominal-card" onclick="selectCard(this, 'Weekly Diamond Pass', 'Rp 27.500,00')">
+            <div class="card-left">
+                <img src="diamond-mini.jpg" alt="Icon" class="card-image">
+                <span class="card-title">Weekly Diamond Pass</span>
+            </div>
+            <div class="card-right">
+                <div class="card-price">Rp 27.500,00</div>
+            </div>
+            <div class="active-check">
+                <i class="ph-bold ph-check"></i>
+            </div>
+        </div>
+    </section>
+
+    <section class="cards-container tab-category-content" id="cat-starlight">
+        <div class="nominal-card" onclick="selectCard(this, 'Starlight Member', 'Rp 145.000,00')">
+            <div class="card-left">
+                <img src="diamond-mini.jpg" alt="Icon" class="card-image">
+                <span class="card-title">Starlight Member</span>
+            </div>
+            <div class="card-right">
+                <div class="card-price">Rp 145.000,00</div>
+            </div>
+            <div class="active-check">
+                <i class="ph-bold ph-check"></i>
+            </div>
+        </div>
+    </section>
+
+
+<section class="form-section-container">
+    <div class="checkout-card">
+         <div class="form-group">
+           <label class="form-label">ID</label>
+             <div class="form-input-wrapper">
+               <input type="text" class="form-input" id="inputId" placeholder="Masukkan ID">
+              <i class="ph ph-info info-icon" onclick="openInfoModal()"></i>
+            </div>
+         </div>
+
+<div class="form-group">
+    <label class="form-label">SERVER</label>
+    <div class="form-input-wrapper">
+        <input type="text" class="form-input" id="inputServer" placeholder="Server ID">
     </div>
 </div>
 
-
-            <div id="tab-panduan" class="tab-content hidden relative overflow-hidden max-h-[380px] transition-[max-height] duration-800 ease-[cubic-bezier(0.4,0,0.2,1)] [&.active]:block [&.expanded]:max-h-[2500px] [&.expanded]:pb-6">
-                <h3 class="text-[16px] font-extrabold mb-4 text-white">Cara Top Up</h3>
-                <div class="mt-4 flex flex-col gap-4">
-                    <div class="flex items-start gap-[14px]">
-                        <div class="bg-yellow text-nav w-5 h-5 rounded-full flex items-center justify-center text-[13px] font-extrabold shrink-0">1</div>
-                        <div class="text-[13px] text-muted leading-[1.5] pt-[2px]">Pilih nominal diamond yang ingin kamu beli pada daftar di atas.</div>
-                    </div>
-                    <div class="flex items-start gap-[14px]">
-                        <div class="bg-yellow text-nav w-5 h-5 rounded-full flex items-center justify-center text-[13px] font-extrabold shrink-0">2</div>
-                        <div class="text-[13px] text-muted leading-[1.5] pt-[2px]">Masukkan <strong class="text-white">Zone ID</strong> dan <strong class="text-white">User ID</strong> Mobile Legends kamu di kolom yang tersedia.</div>
-                    </div>
-                    
-                    <img src="https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?auto=format&fit=crop&w=800&q=80" alt="Panduan User ID" class="w-full h-auto object-cover rounded-[4px] my-2 border border-white/10">
-                    
-                    <div class="flex items-start gap-[14px]">
-                        <div class="bg-yellow text-nav w-5 h-5 rounded-full flex items-center justify-center text-[13px] font-extrabold shrink-0">3</div>
-                        <div class="text-[13px] text-muted leading-[1.5] pt-[2px]">Pilih metode pembayaran (PayPal atau lainnya), lalu klik tombol <strong class="text-white">Beli sekarang</strong>.</div>
-                    </div>
-                    <div class="flex items-start gap-[14px]">
-                        <div class="bg-yellow text-nav w-5 h-5 rounded-full flex items-center justify-center text-[13px] font-extrabold shrink-0">4</div>
-                        <div class="text-[13px] text-muted leading-[1.5] pt-[2px]">Selesaikan pembayaran dan diamond akan langsung masuk ke akun Mobile Legends kamu secara otomatis!</div>
-                    </div>
-                </div>
-                 <div class="read-more-wrapper absolute bottom-0 left-0 right-0 h-[100px] bg-gradient-to-b from-[#2c0d8300] via-card to-card flex items-end justify-center pb-4 transition-all duration-500 ease-in-out [.expanded_&]:relative [.expanded_&]:h-auto [.expanded_&]:bg-transparent [.expanded_&]:pb-0 [.expanded_&]:mt-4">
-                    <span class="text-white text-[12px] font-normal cursor-pointer" id="readMoreGuideText" onclick="toggleGuide()">Baca selengkapnya</span>
-                </div>
+        <label class="checkbox-container">
+            <input type="checkbox" checked id="rememberCheckbox">
+            <div class="custom-checkbox" id="checkboxVisual">
+                <i class="ph-bold ph-check"></i>
             </div>
+            <span class="checkbox-label">sudah sesuai <i class="ph ph-info"></i></span>
+        </label>
 
+        <div class="divider"></div>
+
+        <div class="checkout-price" id="summaryPrice">Rp 0</div>
+        <div class="checkout-cashback" style="display: none;">
+            <i class="ph-bold ph-arrows-clockwise"></i> <span></span>
         </div>
-    </section>
 
-    <section class="py-5 px-4 bg-top">
-        <h2 class="text-[14px] font-bold mb-[15px] text-white">Jelajahi game terkait</h2>
+        <div class="selected-item-box">
+            <div class="circle-check">
+                <i class="ph-bold ph-check"></i>
+            </div>
+<span class="selected-item-text" id="summaryTitle">Pilih produk terlebih dahulu</span>
+        </div>
+<button class="btn btn-buy" onclick="openPaymentModal()">Pilih metode pembayaran</button>
+
+
+        <div class="safe-purchase">
+            <i class="ph ph-lock-key"></i>
+            <span>Pastikan formulir sudah sesuai</span>
+        </div>
+    </div>
+</section>
+
+    <section class="description-section">
+<div class="tabs-header">
+    <div class="tab-item" onclick="switchTab('deskripsi', this)">Deskripsi produk</div>
+    <div class="tab-item" onclick="switchTab('panduan', this)">Panduan top-up</div>
+    <div class="tab-item active" onclick="switchTab('ulasan', this)">⭐ Ulasan</div>
+</div>
+
         
-        <div class="flex flex-col gap-3">
-            <div class="bg-card border-0 border-cyan rounded-none flex justify-between p-3 relative overflow-hidden">
-                <div class="flex gap-4 flex-1">
-                    <div class="w-[100px] h-[125px] rounded-none overflow-hidden relative bg-black">
-                        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=200&q=80" alt="ML Diamonds" class="w-full h-full object-cover">
-                        <div class="absolute bottom-0 left-0 right-0 bg-black/70 flex items-center gap-1 py-1 px-[6px]">
-                            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/e/ee/Mobile_Legends_Bang_Bang_logo.png/220px-Mobile_Legends_Bang_Bang_logo.png" alt="logo" class="w-3 h-3">
-                            <span class="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis">Mobile Leg...</span>
-                        </div>
-                    </div>
-                    <div class="flex-1 flex flex-col">
-                        <p class="text-[12px] font-bold text-yellow mb-[5px]">DISKON</p>                     
-                        <h3 class="text-[14px] font-bold leading-[1.3] mb-[6px] text-white line-clamp-2">Mobile Legends: Bang Bang – 1 USD – 56 Diamonds Mdirect Ke...</h3>
-                        <div class="flex flex-col mb-0">
-                            <span class="text-[11px] text-white mt-[7px]">Mulai</span>
-                            <span class="text-[15px] font-extrabold">Rp 21.264,91</span>
-                            <span class="text-[11px] text-cyan font-semibold mt-1">10% Cashback</span>
-                        </div>
-                    </div>
+        <div class="tab-body" id="descTabBody">
+            
+            <div id="tab-deskripsi" class="tab-content">
+                
+                <div class="cms-content">
+                    <h3>Top Up Diamond Mobile Legends</h3>
+                    <p>
+                        Jika kamu menyukai game aksi kompetitif ber-genre <em>Multiplayer Online Battle Arena</em> (MOBA) yang serba cepat, <strong>Mobile Legends: Bang Bang</strong> adalah pilihan yang tepat. Game ini memang gratis untuk dimainkan (<em>free-to-play</em>), tetapi memiliki sistem transaksi mikro di dalamnya.
+                    </p>
+
+                    <h4>Mata Uang di Land of Dawn</h4>
+                    <p>
+                        Di dalam game ini, terdapat mata uang dasar seperti <strong>Ticket</strong> dan <strong>Battle Points (Gold)</strong> yang bisa didapatkan secara gratis melalui <em>grinding</em> (bermain rutin, menyelesaikan misi, atau event). Namun, mengumpulkan item tersebut butuh waktu ekstra, terutama jika hero incaranmu cukup mahal.
+                    </p>
+                    
+                    <h4>Kenapa Butuh Diamond?</h4>
+                    <p>
+                        <strong>Diamond</strong> adalah mata uang premium yang diibaratkan sebagai 'jalur VIP'. Dengan Diamond, kamu tidak perlu menunggu berminggu-minggu untuk mendapatkan item impian. Berikut fungsi utamanya:
+                    </p>
+                    <ul>
+                        <li>Membeli hero baru secara instan.</li>
+                        <li>Membeli <em>Skin</em> eksklusif agar tampilan lebih keren.</li>
+                        <li>Mengikuti <em>spin event / gacha</em> untuk item langka.</li>
+                        <li>Berlangganan <strong>Starlight Member</strong> bulanan.</li>
+                        <li>Mengirim <em>gift</em> (hadiah) berupa skin/item ke teman mabar.</li>
+                    </ul>
+
+                    <p>
+                        Singkatnya, kalau kamu mau menikmati seluruh fitur Mobile Legends secara maksimal dan instan, Diamond adalah kuncinya. Gak perlu bingung, langsung aja isi ulang Diamond MLBB kamu di <strong>PaperVoucher</strong>! Proses kilat, harga aman di kantong, dan pastinya dijamin legal.
+                    </p>
                 </div>
-                <div class="flex flex-col justify-between items-end">
-                    <div class="text-[20px] cursor-pointer opacity-1 text-transparent"><i class="ph ph-heart"></i></div>
-                    <div class="bg-cyan text-[#1a0847] w-7 h-7 flex items-center justify-center rounded-[3px] text-[18px] mb-0 cursor-pointer"><i class="ph ph-plus-circle"></i></div>
+                <div class="read-more-wrapper">
+                    <span class="read-more-text" id="readMoreText" onclick="toggleDescription()">Baca selengkapnya</span>
                 </div>
             </div>
-            
-            <div class="bg-card border-0 border-cyan rounded-none flex justify-between p-3 relative overflow-hidden">
-                <div class="flex gap-4 flex-1">
-                    <div class="w-[100px] h-[125px] rounded-none overflow-hidden relative bg-black">
-                        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=200&q=80" alt="ML Diamonds" class="w-full h-full object-cover">
-                        <div class="absolute bottom-0 left-0 right-0 bg-black/70 flex items-center gap-1 py-1 px-[6px]">
-                            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/e/ee/Mobile_Legends_Bang_Bang_logo.png/220px-Mobile_Legends_Bang_Bang_logo.png" alt="logo" class="w-3 h-3">
-                            <span class="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis">Mobile Leg...</span>
+
+
+            <div id="tab-panduan" class="tab-content">
+                <div class="cms-content">
+                    
+                    <h3>Cara Menemukan User ID</h3>
+                    <p>Untuk melakukan top-up, kamu memerlukan <strong>User ID</strong> dan <strong>Zone ID</strong> dari akun Mobile Legends kamu. Ikuti langkah berikut:</p>
+                    
+                    <div class="guide-list">
+                        <div class="guide-step">
+                            <div class="step-number">1</div>
+                            <div class="step-text">Buka aplikasi Mobile Legends dan masuk ke layar utama game (Lobby).</div>
                         </div>
-                    </div>
-                    <div class="flex-1 flex flex-col">
-                        <p class="text-[12px] font-bold text-yellow mb-[5px]">DISKON</p>                  
-                        <h3 class="text-[14px] font-bold leading-[1.3] mb-[6px] text-white line-clamp-2">Mobile Legends: Bang Bang – 1 USD – 56 Diamonds Mdirect Ke...</h3>
+                        <div class="guide-step">
+                            <div class="step-number">2</div>
+                            <div class="step-text">Ketuk <strong>Avatar / Foto Profil</strong> kamu yang berada di pojok kiri atas layar.</div>
+                        </div>
                         
-                        <div class="flex flex-col mb-0">
-                            <span class="text-[11px] text-white mt-[7px]">Mulai</span>
-                            <span class="text-[15px] font-extrabold">Rp 16.837,80</span>
-                            <span class="text-[11px] text-cyan font-semibold mt-1">10% Cashback</span>
+                        <img src="https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?auto=format&fit=crop&w=800&q=80" alt="Panduan Cari User ID MLBB" class="guide-img-responsive">
+                        
+                        <div class="guide-step">
+                            <div class="step-number">3</div>
+                            <div class="step-text">Pada halaman profil, kamu akan melihat deretan angka di bawah nama akunmu. Contoh: <strong>12345678 (1234)</strong>. Angka di luar kurung adalah User ID, dan angka di dalam kurung adalah Zone ID.</div>
                         </div>
                     </div>
+
+                    <hr class="guide-divider">
+
+                    <h3>Cara Membeli Diamond</h3>
+                    <p>Setelah kamu mencatat User ID dan Zone ID, ikuti langkah mudah ini untuk menyelesaikan pembelian:</p>
+
+                    <div class="guide-list">
+                        <div class="guide-step">
+                            <div class="step-number">1</div>
+                            <div class="step-text">Pilih nominal Diamond, Weekly Pass, atau Membership pada daftar produk di atas.</div>
+                        </div>
+                        <div class="guide-step">
+                            <div class="step-number">2</div>
+                            <div class="step-text">Gulir ke bawah, lalu masukkan <strong>User ID</strong> dan <strong>Zone ID</strong> kamu ke dalam kolom form yang tersedia.</div>
+                        </div>
+                        
+                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80" alt="Panduan Pembelian TopupClin" class="guide-img-responsive">
+                        
+                        <div class="guide-step">
+                            <div class="step-number">3</div>
+                            <div class="step-text">Klik tombol <strong>Pilih metode pembayaran</strong>, selesaikan transaksi, dan Diamond akan langsung masuk ke akunmu dalam hitungan detik!</div>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="flex flex-col justify-between items-end">
-                    <div class="text-[20px] cursor-pointer opacity-1 text-transparent"><i class="ph ph-heart"></i></div>
-                    <div class="bg-cyan text-[#1a0847] w-7 h-7 flex items-center justify-center rounded-[3px] text-[18px] mb-0 cursor-pointer"><i class="ph ph-plus-circle"></i></div>
+
+                <div class="read-more-wrapper">
+                    <span class="read-more-text" id="readMoreGuideText" onclick="toggleGuide()">Baca selengkapnya</span>
                 </div>
             </div>
 
-            <div class="bg-card border-0 border-cyan rounded-none flex justify-between p-3 relative overflow-hidden">
-                <div class="flex gap-4 flex-1">
-                    <div class="w-[100px] h-[125px] rounded-none overflow-hidden relative bg-black">
-                        <div class="w-full h-full flex items-center justify-center bg-black">
-                            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/e/ee/Mobile_Legends_Bang_Bang_logo.png/220px-Mobile_Legends_Bang_Bang_logo.png" alt="MLBB Logo" class="w-[80%] h-auto">
-                        </div>
-                        <div class="absolute bottom-0 left-0 right-0 bg-black/70 flex items-center gap-1 py-1 px-[6px]">
-                            <i class="ph ph-question text-[14px] text-white"></i>
-                            <span class="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis">Mdirect Mo...</span>
-                        </div>
-                    </div>
-                    <div class="flex-1 flex flex-col">
-                        <p class="text-[12px] font-bold text-yellow mb-[5px]">DISKON</p>                  
-                        <h3 class="text-[14px] font-bold leading-[1.3] mb-[6px] text-white line-clamp-2">Mobile Legends: Bang Bang – 1 USD – 56 Diamonds Mdirect Ke...</h3>
-                        <div class="flex flex-col mb-0">
-                            <span class="text-[11px] text-white mt-[7px]">Mulai</span>
-                            <span class="text-[15px] font-extrabold">Rp 18.208,32</span>
-                            <span class="text-[11px] text-cyan font-semibold mt-1">6% Cashback</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex flex-col justify-between items-end">
-                    <div class="text-[20px] cursor-pointer opacity-1 text-transparent"><i class="ph ph-heart"></i></div>
-                    <div class="bg-cyan text-[#1a0847] w-7 h-7 flex items-center justify-center rounded-[3px] text-[18px] mb-0 cursor-pointer"><i class="ph ph-plus-circle"></i></div>
+<div id="tab-ulasan" class="tab-content active">
+    <div class="review-header">
+        <div class="rating-big">
+            <i class="ph-fill ph-star"></i>
+            <span class="score">4.48</span>
+            <span class="out-of">/ 5.0</span>
+        </div>
+        <div class="rating-subtitle">Berdasarkan <strong>1.014</strong> ulasan pelanggan.</div>
+    </div>
+
+    <div class="rating-bars">
+        <div class="bar-row">
+            <span>5</span>
+            <i class="ph-fill ph-star"></i>
+            <div class="bar-track">
+                <div class="bar-fill" style="width: 59%;"></div>
+            </div>
+            <span class="bar-count">597</span>
+        </div>
+        <div class="bar-row">
+            <span>4</span>
+            <i class="ph-fill ph-star"></i>
+            <div class="bar-track">
+                <div class="bar-fill" style="width: 30%;"></div>
+            </div>
+            <span class="bar-count">304</span>
+        </div>
+        <div class="bar-row">
+            <span>3</span>
+            <i class="ph-fill ph-star"></i>
+            <div class="bar-track">
+                <div class="bar-fill" style="width: 11%;"></div>
+            </div>
+            <span class="bar-count">113</span>
+        </div>
+        <div class="bar-row">
+            <span>2</span>
+            <i class="ph-fill ph-star"></i>
+            <div class="bar-track"></div>
+            <span class="bar-count">0</span>
+        </div>
+        <div class="bar-row">
+            <span>1</span>
+            <i class="ph-fill ph-star"></i>
+            <div class="bar-track"></div>
+            <span class="bar-count">0</span>
+        </div>
+    </div>
+
+    <div class="review-list">
+        <div class="review-item">
+            <div class="review-meta">
+                <span class="reviewer-name">081*****577</span>
+                <div class="review-stars">
+                    <i class="ph-fill ph-star"></i>
+                    <i class="ph-fill ph-star"></i>
+                    <i class="ph-fill ph-star"></i>
+                    <i class="ph-fill ph-star"></i>
+                    <i class="ph-fill ph-star"></i>
                 </div>
             </div>
+            <div class="review-meta-sub">
+                <span class="review-product">MOBILELEGEND - 44 Diamond</span>
+                <span class="review-date">10-11-2025 20.35.26</span>
+            </div>
+            <div class="review-text">“Harga terjangkau”</div>
+        </div>
+
+        <div class="review-item">
+            <div class="review-meta">
+                <span class="reviewer-name">082******307</span>
+                <div class="review-stars">
+                    <i class="ph-fill ph-star"></i>
+                    <i class="ph-fill ph-star"></i>
+                    <i class="ph-fill ph-star"></i>
+                    <i class="ph-fill ph-star"></i>
+                    <i class="ph-fill ph-star"></i>
+                </div>
+            </div>
+            <div class="review-meta-sub">
+                <span class="review-product">5 Diamonds (5 + 0 Bonus)</span>
+                <span class="review-date">07-11-2025 14.05.51</span>
+            </div>
+            <div class="review-text">“Harga terjangkau”</div>
+        </div>
+
+        <div class="review-item">
+            <div class="review-meta">
+                <span class="reviewer-name">082******307</span>
+                <div class="review-stars">
+                    <i class="ph-fill ph-star"></i>
+                    <i class="ph-fill ph-star"></i>
+                    <i class="ph-fill ph-star"></i>
+                    <i class="ph-fill ph-star"></i>
+                    <i class="ph-fill ph-star"></i>
+                </div>
+            </div>
+            <div class="review-meta-sub">
+                <span class="review-product">5 Diamonds (5 + 0 Bonus)</span>
+                <span class="review-date">05-11-2025 03.44.35</span>
+            </div>
+            <div class="review-text">“Harga terjangkau”</div>
+        </div>
+
+        <div class="review-item" style="border-bottom: none; margin-bottom: 0;">
+            <div class="review-meta">
+                <span class="reviewer-name">082******307</span>
+                <div class="review-stars">
+                    <i class="ph-fill ph-star"></i>
+                    <i class="ph-fill ph-star"></i>
+                    <i class="ph-fill ph-star"></i>
+                    <i class="ph-fill ph-star"></i>
+                    <i class="ph-fill ph-star"></i>
+                </div>
+            </div>
+            <div class="review-meta-sub">
+                <span class="review-product">5 Diamonds (5 + 0 Bonus)</span>
+                <span class="review-date">02-11-2025 07.12.17</span>
+            </div>
+            <div class="review-text">“Harga terjangkau”</div>
+        </div>
+    </div>
+
+    <button class="btn-outline-review">
+        Lihat semua ulasan <i class="ph ph-arrow-right"></i>
+    </button>
+    <div style="padding: 20px 16px; text-align: center;">
+    <button class="btn btn-buy" onclick="openReviewModal()" style="width: auto; padding: 10px 24px; display: inline-block;">
+        Test Buka Popup Ulasan
+    </button>
+</div>
+
+
+</div>
+
         </div>
     </section>
 
-    <div class="sheet-overlay"></div>
-
-    <div class="bottom-sheet-menu">
-        <div class="overflow-y-auto py-6 px-4 flex flex-col gap-6 overscroll-contain hide-scroll">
-            
-            <div class="flex flex-col gap-3">
-                <div class="text-[15px] font-bold text-white">Games</div>
-                <div class="flex overflow-x-auto gap-3 pb-1 hide-scroll">
-                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-sword"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">MLBB</span></div>
-                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-crosshair"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">Free Fire</span></div>
-                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-sword"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">Genshin Imp.</span></div>
-                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-shield-chevron"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">PUBG M</span></div>
-                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-game-controller"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">Valorant</span></div>
+<section class="recommendation-section">
+    <h2 class="rec-title">Jelajahi game terkait</h2>
+    
+    <div class="rec-container">
+        <div class="rec-card">
+            <div class="rec-content">
+                <div class="rec-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=200&q=80" alt="ML Diamonds">
+                    <div class="rec-img-label">
+                        <img src="https://images.unsplash.com/photo-1622556498246-755f44ca76f3?auto=format&fit=crop&w=300&q=80" alt="logo">
+                        <span>Mobile Leg...</span>
+                    </div>
+                </div>
+                <div class="rec-info">
+                      <p class="rec-region">DISKON</p>                     
+                    <h3 class="rec-product-name">Mobile Legends: Bang Bang – 1 USD – 56 Diamonds Mdirect Ke...</h3>
+                    <div class="rec-price-box">
+                        <span class="rec-label-mulai">Mulai</span>
+                        <span class="rec-price">Rp 21.264,91</span>
+                        <span class="rec-cashback">10% Cashback</span>
+                    </div>
+                    <div class="rec-stats">
+                        <i class="ph ph-heart"></i>
+                        <span>9366</span>
+                    </div>
                 </div>
             </div>
+            <div class="rec-actions">
+                <div class="action-btn wishlist"><i class="ph ph-heart"></i></div>
+                <div class="action-btn add-cart"><i class="ph ph-plus-circle"></i></div>
+            </div>
+        </div>
 
-            <div class="flex flex-col gap-3">
-                <div class="text-[15px] font-bold text-white">Isi Pulsa</div>
-                <div class="flex overflow-x-auto gap-3 pb-1 hide-scroll">
-                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-device-mobile"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">Telkomsel</span></div>
-                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-device-mobile"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">Indosat</span></div>
-                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-device-mobile"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">XL / Axis</span></div>
-                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-device-mobile"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">Tri</span></div>
-                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-device-mobile"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">Smartfren</span></div>
+        <div class="rec-card">
+            <div class="rec-content">
+                <div class="rec-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=200&q=80" alt="ML Diamonds">
+                    <div class="rec-img-label">
+                        <img src="https://images.unsplash.com/photo-1622556498246-755f44ca76f3?auto=format&fit=crop&w=300&q=80" alt="logo">
+                        <span>Mobile Leg...</span>
+                    </div>
+                </div>
+                <div class="rec-info">
+                    <p class="rec-region region-ph">DISKON</p>                  
+                    <h3 class="rec-product-name">Mobile Legends: Bang Bang – 1 USD – 56 Diamonds Mdirect Ke...</h3>
+                    
+                    <div class="rec-price-box">
+                        <span class="rec-label-mulai">Mulai</span>
+                        <span class="rec-price">Rp 16.837,80</span>
+                        <span class="rec-cashback">10% Cashback</span>
+                    </div>
+                    <div class="rec-stats">
+                        <i class="ph ph-heart"></i>
+                        <span>1873</span>
+                    </div>
                 </div>
             </div>
+            <div class="rec-actions">
+                <div class="action-btn wishlist"><i class="ph ph-heart"></i></div>
+                <div class="action-btn add-cart"><i class="ph ph-plus-circle"></i></div>
+            </div>
+        </div>
 
-            <div class="flex flex-col gap-3">
-                <div class="text-[15px] font-bold text-white">Paket Data</div>
-                <div class="flex overflow-x-auto gap-3 pb-1 hide-scroll">
-                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-wifi-high"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">Telkomsel</span></div>
-                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-wifi-high"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">Indosat</span></div>
-                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-wifi-high"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">XL / Axis</span></div>
-                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-wifi-high"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">Tri</span></div>
+        <div class="rec-card">
+            <div class="rec-content">
+                <div class="rec-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1622556498246-755f44ca76f3?auto=format&fit=crop&w=300&q=80" alt="MLBB Logo">
+                    <div class="rec-img-label">
+                        <i class="ph ph-question"></i>
+                        <span>Mdirect Mo...</span>
+                    </div>
+                </div>
+                <div class="rec-info">
+                    <p class="rec-region region-global-alt">DISKON</p>                  
+                    <h3 class="rec-product-name">Mobile Legends: Bang Bang – 1 USD – 56 Diamonds Mdirect Ke...</h3>
+                    <div class="rec-price-box">
+                        <span class="rec-label-mulai">Mulai</span>
+                        <span class="rec-price">Rp 18.208,32</span>
+                        <span class="rec-cashback">6% Cashback</span>
+                    </div>
+                    <div class="rec-stats">
+                        <i class="ph ph-heart"></i>
+                        <span>401</span>
+                    </div>
                 </div>
             </div>
-
-            <div class="flex flex-col gap-3">
-                <div class="text-[15px] font-bold text-white">Top Up E-Wallet</div>
-                <div class="flex overflow-x-auto gap-3 pb-1 hide-scroll">
-                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-wallet"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">GoPay</span></div>
-                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-wallet"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">OVO</span></div>
-                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-wallet"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">DANA</span></div>
-                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-wallet"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">ShopeePay</span></div>
-                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-wallet"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">LinkAja</span></div>
-                </div>
+            <div class="rec-actions">
+                <div class="action-btn wishlist"><i class="ph ph-heart"></i></div>
+                <div class="action-btn add-cart"><i class="ph ph-plus-circle"></i></div>
             </div>
+        </div>
+    </div>
+</section>
 
-            <div class="flex flex-col gap-3">
-                <div class="text-[15px] font-bold text-white">Voucher & Hiburan</div>
-                <div class="flex overflow-x-auto gap-3 pb-1 hide-scroll">
-                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-bold ph-google-play-logo"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">Google Play</span></div>
-                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-spotify-logo"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">Spotify</span></div>
-                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-monitor-play"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">Steam</span></div>
-                </div>
+<section class="gift-card-section">
+    <div class="gc-header">
+        <h2 class="gc-title-main">Gift Card digital terlaris
+    </div>
+    
+    <div class="gc-container">
+        <div class="gc-card">
+            <img src="https://images.unsplash.com/photo-1622556498246-755f44ca76f3?auto=format&fit=crop&w=300&q=80" alt="Amazon" class="gc-bg">
+            <div class="gc-logo-text">Amazon</div>
+            <div class="gc-hover-content">
+                <h3 class="gc-hover-title">Amazon Gift Card US Region</h3>
+                <p class="gc-hover-desc">Isi saldo Amazon Anda dengan cepat untuk berbelanja jutaan produk digital dan fisik di Amazon.com.</p>
             </div>
+        </div>
 
-            <div class="flex flex-col gap-3">
-                <div class="text-[15px] font-bold text-white">Tagihan PPOB</div>
-                <div class="flex overflow-x-auto gap-3 pb-1 hide-scroll">
-                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-lightning"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">Token PLN</span></div>
-                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-drop"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">PDAM</span></div>
-                    <div class="bg-nav rounded-[7px] p-3 min-w-[85px] flex flex-col items-center gap-2.5 text-center border border-white/5 cursor-pointer transition-colors active:bg-top"><div class="bg-top flex items-center justify-center text-[24px] text-yellow w-[44px] h-[44px] rounded-[10px] object-cover"><i class="ph-fill ph-heartbeat"></i></div><span class="text-[11px] font-bold text-muted whitespace-nowrap">BPJS</span></div>
-                </div>
+        <div class="gc-card">
+            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=300&q=80" alt="Razer Gold" class="gc-bg">
+            <div class="gc-logo-text" style="color: #f8ce1a;">Razer Gold</div>
+            <div class="gc-hover-content">
+                <h3 class="gc-hover-title">Razer Gold Global Pin</h3>
+                <p class="gc-hover-desc">Kredit virtual terpadu untuk gamer sedunia. Beli game, item in-game, dan konten eksklusif lainnya.</p>
             </div>
+        </div>
 
+        <div class="gc-card">
+            <img src="https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?auto=format&fit=crop&w=300&q=80" alt="iTunes" class="gc-bg">
+            <div class="gc-logo-text" style="color: #fff;">iTunes</div>
+            <div class="gc-hover-content">
+                <h3 class="gc-hover-title">Apple iTunes Gift Card</h3>
+                <p class="gc-hover-desc">Nikmati musik, film, aplikasi, dan game dari App Store. Cara termudah untuk top up saldo Apple Anda.</p>
+            </div>
         </div>
     </div>
 
-    <div class="floating-all-btn">
-        <i class="ph ph-squares-four"></i>
+    <div class="gc-footer">
+        <button class="btn-outline-gc">Tampilkan semua</button>
     </div>
+</section>
+
+<section class="affiliate-section">
+    <div class="aff-header">
+        <h2 class="aff-title"><i class="ph-fill ph-game-controller"></i> Rekomendasi Gear</h2>
+    </div>
+    
+    <div class="aff-scroll">
+        
+        <div class="aff-card">
+            <div class="aff-img-wrapper">
+                <div class="aff-badge tiktok">TikTok</div>
+                <img src="https://images.unsplash.com/photo-1628277613967-6abca504d0ac?auto=format&fit=crop&w=200&q=80" alt="Thumb Sleeves">
+            </div>
+            <div class="aff-info">
+                <h4 class="aff-name">Sarung Jari Gaming Anti Keringat (Isi 2)</h4>
+                <span class="aff-price-hint">Harga &lt; Rp 15.000</span>
+                <a href="#" target="_blank" class="aff-btn">Cek Barang</a>
+            </div>
+        </div>
+
+        <div class="aff-card">
+            <div class="aff-img-wrapper">
+                <div class="aff-badge shopee">Shopee</div>
+                <img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=200&q=80" alt="Cooling Fan">
+            </div>
+            <div class="aff-info">
+                <h4 class="aff-name">Funcooler Radiator HP Super Dingin RGB</h4>
+                <span class="aff-price-hint">Harga &lt; Rp 90.000</span>
+                <a href="#" target="_blank" class="aff-btn">Cek Barang</a>
+            </div>
+        </div>
+
+        <div class="aff-card">
+            <div class="aff-img-wrapper">
+                <div class="aff-badge shopee">Shopee</div>
+                <img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=200&q=80" alt="TWS Gaming">
+            </div>
+            <div class="aff-info">
+                <h4 class="aff-name">TWS Gaming Low Latency Bluetooth 5.3</h4>
+                <span class="aff-price-hint">Mulai &gt; Rp 150.000</span>
+                <a href="#" target="_blank" class="aff-btn">Cek Barang</a>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+    <footer class="main-footer">
+        <p class="footer-desc">Top Up Games Favoritmu di PaperVoucher! Tersedia Berbagai Macam Produk, Layanan & Pembayaran yang bisa digunakan. Proses Otomatis, Aman, & Pastinya Terjangkau.</p>
+
+        <div class="footer-section">
+            <h4 class="footer-title">Berlangganan Newsletter</h4>
+            <div class="newsletter-box">
+                <input type="email" placeholder="Masukkan email kamu..." class="newsletter-input">
+                <button class="newsletter-btn"><i class="ph-bold ph-paper-plane-right"></i></button>
+            </div>
+            <p class="footer-subtext">Dapatkan info diskon dan promo flash sale terbaru.</p>
+        </div>
+
+        <div class="payment-box">
+            <h4 class="footer-title">Pembayaran Aman</h4>
+            <div class="payment-logos">
+                <div class="pay-logo-wrapper"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Shopee.svg/1200px-Shopee.svg.png" alt="ShopeePay" style="height: 18px;"></div>
+                <div class="pay-logo-wrapper"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/LinkAja.svg/2560px-LinkAja.svg.png" alt="LinkAja"></div>
+                <div class="pay-logo-wrapper"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Logo_QRIS.svg/1200px-Logo_QRIS.svg.png" alt="QRIS"></div>
+                <div class="pay-logo-wrapper"><img src="https://upload.wikimedia.org/wikipedia/commons/8/86/Alfamart_logo.svg" alt="Alfamart"></div>
+                <div class="pay-logo-wrapper"><img src="https://upload.wikimedia.org/wikipedia/id/thumb/a/a1/PermataBank_logo.svg/1200px-PermataBank_logo.svg.png" alt="PermataBank"></div>
+            </div>
+            <p class="more-payment">+ Banyak metode lainnya</p>
+        </div>
+
+        <div class="footer-section">
+            <h4 class="footer-title">Butuh Bantuan?</h4>
+            <a href="https://wa.me/6283853096446" class="wa-btn">
+                <i class="ph-bold ph-whatsapp-logo"></i> Chat WhatsApp
+            </a>
+            <div class="contact-info">
+                <p>Jam Operasional: 08:00 - 23:00 WIB</p>
+                <p><i class="ph ph-envelope-simple"></i> admin@papervoucher.com</p>
+                <p>Trowulan, Kab Mojokerto, Jawa Timur 20000</p>
+            </div>
+        </div>
+
+        <div class="footer-section">
+            <h4 class="footer-title">Jaminan Transaksi</h4>
+            <p class="footer-subtext">Garansi uang kembali 100% apabila layanan gagal terkirim karena kesalahan sistem.</p>
+            <p class="legal-text"><i class="ph-bold ph-check"></i> 100% Legal & Aman</p>
+        </div>
+
+        <div class="footer-links-grid">
+            <div class="footer-link-col">
+                <h4 class="footer-title">Peta Situs</h4>
+                <ul>
+                    <li><a href="#">Beranda</a></li>
+                    <li><a href="#">Ulasan</a></li>
+                    <li><a href="#">Cek Transaksi</a></li>
+                    <li><a href="#">Daftar Harga</a></li>
+                    <li><a href="#">Artikel</a></li>
+                    <li><a href="#">Hubungi Kami</a></li>
+                </ul>
+            </div>
+            <div class="footer-link-col">
+                <h4 class="footer-title">Informasi</h4>
+                <ul>
+                    <li><a href="#">Kebijakan Privasi</a></li>
+                    <li><a href="#">Jasa Pembuatan Website</a></li>
+                    <li><a href="#">Kirim Laporan</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+
+<div class="sheet-overlay"></div>
+
+<div class="bottom-sheet-menu">
+    <div class="sheet-content">
+        
+        <div class="sheet-section">
+            <div class="sheet-title">Games</div>
+            <div class="horizontal-scroll">
+                <div class="item-card"><div class="icon-placeholder"><i class="ph-fill ph-sword"></i></div><span>MLBB</span></div>
+                <div class="item-card"><div class="icon-placeholder"><i class="ph-fill ph-crosshair"></i></div><span>Free Fire</span></div>
+                <div class="item-card"><div class="icon-placeholder"><i class="ph-fill ph-sword"></i></div><span>Genshin Imp.</span></div>
+                <div class="item-card"><div class="icon-placeholder"><i class="ph-fill ph-shield-chevron"></i></div><span>PUBG M</span></div>
+                <div class="item-card"><div class="icon-placeholder"><i class="ph-fill ph-game-controller"></i></div><span>Valorant</span></div>
+            </div>
+        </div>
+
+        <div class="sheet-section">
+            <div class="sheet-title">Isi Pulsa</div>
+            <div class="horizontal-scroll">
+                <div class="item-card"><div class="icon-placeholder"><i class="ph-fill ph-device-mobile"></i></div><span>Telkomsel</span></div>
+                <div class="item-card"><div class="icon-placeholder"><i class="ph-fill ph-device-mobile"></i></div><span>Indosat</span></div>
+                <div class="item-card"><div class="icon-placeholder"><i class="ph-fill ph-device-mobile"></i></div><span>XL / Axis</span></div>
+                <div class="item-card"><div class="icon-placeholder"><i class="ph-fill ph-device-mobile"></i></div><span>Tri</span></div>
+                <div class="item-card"><div class="icon-placeholder"><i class="ph-fill ph-device-mobile"></i></div><span>Smartfren</span></div>
+            </div>
+        </div>
+
+        <div class="sheet-section">
+            <div class="sheet-title">Paket Data</div>
+            <div class="horizontal-scroll">
+                <div class="item-card"><div class="icon-placeholder"><i class="ph-fill ph-wifi-high"></i></div><span>Telkomsel</span></div>
+                <div class="item-card"><div class="icon-placeholder"><i class="ph-fill ph-wifi-high"></i></div><span>Indosat</span></div>
+                <div class="item-card"><div class="icon-placeholder"><i class="ph-fill ph-wifi-high"></i></div><span>XL / Axis</span></div>
+                <div class="item-card"><div class="icon-placeholder"><i class="ph-fill ph-wifi-high"></i></div><span>Tri</span></div>
+            </div>
+        </div>
+
+        <div class="sheet-section">
+            <div class="sheet-title">Top Up E-Wallet</div>
+            <div class="horizontal-scroll">
+                <div class="item-card"><div class="icon-placeholder"><i class="ph-fill ph-wallet"></i></div><span>GoPay</span></div>
+                <div class="item-card"><div class="icon-placeholder"><i class="ph-fill ph-wallet"></i></div><span>OVO</span></div>
+                <div class="item-card"><div class="icon-placeholder"><i class="ph-fill ph-wallet"></i></div><span>DANA</span></div>
+                <div class="item-card"><div class="icon-placeholder"><i class="ph-fill ph-wallet"></i></div><span>ShopeePay</span></div>
+                <div class="item-card"><div class="icon-placeholder"><i class="ph-fill ph-wallet"></i></div><span>LinkAja</span></div>
+            </div>
+        </div>
+
+        <div class="sheet-section">
+            <div class="sheet-title">Voucher & Hiburan</div>
+            <div class="horizontal-scroll">
+                <div class="item-card"><div class="icon-placeholder"><i class="ph-bold ph-google-play-logo"></i></div><span>Google Play</span></div>
+                <div class="item-card"><div class="icon-placeholder"><i class="ph-fill ph-spotify-logo"></i></div><span>Spotify</span></div>
+                <div class="item-card"><div class="icon-placeholder"><i class="ph-fill ph-monitor-play"></i></div><span>Steam</span></div>
+            </div>
+        </div>
+
+        <div class="sheet-section">
+            <div class="sheet-title">Tagihan PPOB</div>
+            <div class="horizontal-scroll">
+                <div class="item-card"><div class="icon-placeholder"><i class="ph-fill ph-lightning"></i></div><span>Token PLN</span></div>
+                <div class="item-card"><div class="icon-placeholder"><i class="ph-fill ph-drop"></i></div><span>PDAM</span></div>
+                <div class="item-card"><div class="icon-placeholder"><i class="ph-fill ph-heartbeat"></i></div><span>BPJS</span></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="payment-modal-overlay" id="paymentModal">
+    <div class="payment-modal-card">
+        <div class="pm-header">
+            <h3 class="pm-title">Pilih Pembayaran</h3>
+            <i class="ph ph-x pm-close" onclick="closePaymentModal()"></i>
+        </div>
+
+        <div class="pm-bento-grid">
+            
+            <div class="pm-bento-item full-width" onclick="selectPayment(this)">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Logo_QRIS.svg/1200px-Logo_QRIS.svg.png" alt="QRIS" class="pm-logo" style="height: 22px; margin-right: 8px;">
+                <div class="pm-bento-info">
+                    <span class="pm-bento-name">QRIS</span>
+                    <span class="pm-bento-desc">Semua E-Wallet & M-Banking</span>
+                </div>
+                <div class="pm-check">PILIH</div>
+            </div>
+
+            <div class="pm-bento-item" onclick="selectPayment(this)">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Logo_dana_blue.svg/1200px-Logo_dana_blue.svg.png" alt="DANA" class="pm-logo">
+                <span class="pm-bento-name">DANA</span>
+                <div class="pm-check">PILIH</div>
+            </div>
+            
+            <div class="pm-bento-item" onclick="selectPayment(this)">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Shopee.svg/1200px-Shopee.svg.png" alt="ShopeePay" class="pm-logo">
+                <span class="pm-bento-name">ShopeePay</span>
+                <div class="pm-check">PILIH</div>
+            </div>
+
+            <div class="pm-bento-item" onclick="selectPayment(this)">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Gopay_logo.svg/1200px-Gopay_logo.svg.png" alt="GoPay" class="pm-logo">
+                <span class="pm-bento-name">GoPay</span>
+                <div class="pm-check">PILIH</div>
+            </div>
+
+            <div class="pm-bento-item" onclick="selectPayment(this)">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/OVO_logo.svg/1200px-OVO_logo.svg.png" alt="OVO" class="pm-logo">
+                <span class="pm-bento-name">OVO</span>
+                <div class="pm-check">PILIH</div>
+            </div>
+
+            <div class="pm-bento-item" onclick="selectPayment(this)">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia.svg/1200px-Bank_Central_Asia.svg.png" alt="BCA" class="pm-logo">
+                <span class="pm-bento-name">VA BCA</span>
+                <div class="pm-check">PILIH</div>
+            </div>
+
+            <div class="pm-bento-item" onclick="selectPayment(this)">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Bank_Mandiri_logo_2016.svg/1200px-Bank_Mandiri_logo_2016.svg.png" alt="Mandiri" class="pm-logo">
+                <span class="pm-bento-name">VA Mandiri</span>
+                <div class="pm-check">PILIH</div>
+            </div>
+
+            <div class="pm-bento-item" onclick="selectPayment(this)">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/BRI_2020.svg/1200px-BRI_2020.svg.png" alt="BRI" class="pm-logo">
+                <span class="pm-bento-name">VA BRI</span>
+                <div class="pm-check">PILIH</div>
+            </div>
+
+            <div class="pm-bento-item" onclick="selectPayment(this)">
+                <img src="https://upload.wikimedia.org/wikipedia/id/thumb/5/55/BNI_logo.svg/1200px-BNI_logo.svg.png" alt="BNI" class="pm-logo">
+                <span class="pm-bento-name">VA BNI</span>
+                <div class="pm-check">PILIH</div>
+            </div>
+
+            <div class="pm-bento-item" onclick="selectPayment(this)">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Logo_Indomaret.png/1200px-Logo_Indomaret.png" alt="Indomaret" class="pm-logo">
+                <span class="pm-bento-name">Indomaret</span>
+                <div class="pm-check">PILIH</div>
+            </div>
+
+            <div class="pm-bento-item" onclick="selectPayment(this)">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/86/Alfamart_logo.svg" alt="Alfamart" class="pm-logo">
+                <span class="pm-bento-name">Alfamart</span>
+                <div class="pm-check">PILIH</div>
+            </div>
+            
+        </div>
+
+
+        <div class="pm-summary" id="pmSummaryContainer">
+            <div class="pm-summary-toggle" onclick="toggleSummaryDetails()">
+                <i class="ph-bold ph-caret-up"></i>
+            </div>
+            
+            <div class="pm-expanded-content">
+                <div class="pm-detail-row">
+                    <span class="detail-label">User ID</span>
+                    <span class="detail-value" id="modalUserId">-</span>
+                </div>
+                <div class="pm-detail-row">
+                    <span class="detail-label">Server ID</span>
+                    <span class="detail-value" id="modalServerId">-</span>
+                </div>
+                <div class="pm-detail-row">
+                    <span class="detail-label">Metode Bayar</span>
+                    <span class="detail-value" id="modalSelectedPayment">-</span>
+                </div>
+            </div>
+
+            <div class="pm-summary-content">
+                <img src="game.jpg" alt="Game Logo" class="pm-summary-img">
+                <div class="pm-summary-details">
+                    <span class="pm-summary-title">Mobile Legends</span>
+                    <span class="pm-summary-item" id="modalItemName">-</span>
+                </div>
+            </div>
+            <div class="pm-summary-price" id="modalItemPrice">Rp 0</div>
+        </div>
+
+
+<button class="btn btn-buy pm-submit" onclick="processPayment()">Bayar Sekarang</button>
+
+    </div>
+</div>
+
+<div class="floating-all-btn">
+    <i class="ph ph-squares-four"></i>
+</div>
+
 
 </div>
+
+<div class="info-modal-overlay" id="infoModal">
+    <div class="info-modal-card">
+        <div class="rm-header">
+            <h3 class="rm-title">Cara Menemukan ID</h3>
+            <i class="ph ph-x rm-close" onclick="closeInfoModal()"></i>
+        </div>
+        
+        <div class="info-modal-body">
+            <img src="https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?auto=format&fit=crop&w=800&q=80" alt="Tutorial ID" class="info-tutorial-img">
+            <p>Buka profil akun in-game kamu. ID biasanya terletak di bawah avatar atau nama karakter. <br><br>Contoh: <strong>12345678 (1234)</strong>. Angka di luar kurung adalah <strong>User ID</strong>, dan di dalam kurung adalah <strong>Server ID</strong>.</p>
+        </div>
+
+        <button class="btn btn-buy rm-submit" onclick="goToGuideTab()">Baca Panduan Lengkap</button>
+    </div>
+</div>
+
+<div class="review-modal-overlay" id="reviewModal">
+    <div class="review-modal-card">
+        <div class="rm-header">
+            <h3 class="rm-title">Bagaimana pesananmu?</h3>
+            <i class="ph ph-x rm-close" onclick="closeReviewModal()"></i>
+        </div>
+        
+        <div class="rm-product-info">
+            <img src="diamond-mini.jpg" alt="Icon">
+            <div>
+                <div class="rm-product-name">5 Diamonds</div>
+                <div class="rm-transaction-id">INV-101125-001</div>
+            </div>
+        </div>
+
+        <div class="rm-rating-input" id="starContainer">
+            <i class="ph ph-star star-input" data-value="1"></i>
+            <i class="ph ph-star star-input" data-value="2"></i>
+            <i class="ph ph-star star-input" data-value="3"></i>
+            <i class="ph ph-star star-input" data-value="4"></i>
+            <i class="ph ph-star star-input" data-value="5"></i>
+        </div>
+        
+        <div class="rm-quick-tags">
+            <div class="quick-tag">⚡ Pengiriman Cepat</div>
+            <div class="quick-tag">💸 Harga Terjangkau</div>
+            <div class="quick-tag">🤝 Pelayanan Ramah</div>
+            <div class="quick-tag">👍 Proses Mudah</div>
+            <div class="quick-tag">🔥 Sangat Membantu</div>
+        </div>
+        
+        <div class="rm-comment-box">
+            <textarea class="rm-textarea" placeholder="Tulis pengalamanmu di sini... (Opsional)" rows="3"></textarea>
+        </div>
+
+        <button class="btn btn-buy rm-submit">Kirim Ulasan</button>
+    </div>
+</div>
+
+
 
 <script>
-    // JS Logika Pilihan Nominal
-    function selectCard(element, title, price) {
-        const cards = document.querySelectorAll('.nominal-card');
-        cards.forEach(card => card.classList.remove('active'));
-        element.classList.add('active');
-        document.getElementById('summaryPrice').innerText = price;
-        document.getElementById('summaryTitle').innerText = title;
-    }
+// Script untuk interaksi sederhana mengubah nominal yang aktif
+function selectCard(element, title, price) {
+    // Hapus class active dari semua card
+    const cards = document.querySelectorAll('.nominal-card');
+    cards.forEach(card => card.classList.remove('active'));
+    
+    // Tambahkan class active ke card yang diklik
+    element.classList.add('active');
 
-    // JS Checkbox
+    // Update teks di bagian bawah (summary)
+    document.getElementById('summaryPrice').innerText = price;
+    document.getElementById('summaryTitle').innerText = title;
+
+    // --- SINKRONISASI CASHBACK ---
+    const cashbackElement = element.querySelector('.card-cashback');
+    const summaryCashbackContainer = document.querySelector('.checkout-cashback');
+
+    if (cashbackElement) {
+        // Jika produk punya cashback, tampilkan div-nya dan update nilainya
+        summaryCashbackContainer.style.display = 'flex';
+        summaryCashbackContainer.innerHTML = `<i class="ph-bold ph-arrows-clockwise"></i> ${cashbackElement.innerText}`;
+    } else {
+        // Jika produk tidak punya cashback (misal Weekly Pass), sembunyikan info cashback-nya
+        summaryCashbackContainer.style.display = 'none';
+    }
+}
+
+
+    // Script untuk custom checkbox 'Ingat Saya'
     const checkbox = document.getElementById('rememberCheckbox');
     const checkboxVisual = document.getElementById('checkboxVisual');
 
-    if(checkbox && checkboxVisual) {
-        checkbox.addEventListener('change', function() {
-            if(this.checked) {
-                checkboxVisual.style.backgroundColor = 'var(--color-yellow)';
-                checkboxVisual.innerHTML = '<i class="ph-bold ph-check text-black text-[14px] font-bold"></i>';
-                checkboxVisual.style.border = 'none';
-            } else {
-                checkboxVisual.style.backgroundColor = '#4417ac';
-                checkboxVisual.innerHTML = '';
-                checkboxVisual.style.border = '1px solid rgba(255,255,255,0.2)';
-            }
-        });
-    }
-
-    // JS Floating Menu
-    const floatingBtn = document.querySelector('.floating-all-btn');
-    const floatingIcon = floatingBtn ? floatingBtn.querySelector('i') : null;
-    const bottomSheet = document.querySelector('.bottom-sheet-menu');
-    const sheetOverlay = document.querySelector('.sheet-overlay');
-
-    function toggleMenu() {
-        if(!floatingBtn || !bottomSheet || !sheetOverlay) return;
-        
-        floatingBtn.classList.toggle('active');
-        bottomSheet.classList.toggle('open');
-        sheetOverlay.classList.toggle('active');
-        
-        if (floatingBtn.classList.contains('active')) {
-            floatingIcon.classList.remove('ph-squares-four');
-            floatingIcon.classList.add('ph-x-circle');
+    checkbox.addEventListener('change', function() {
+        if(this.checked) {
+            checkboxVisual.style.backgroundColor = 'var(--color-yellow)';
+            checkboxVisual.innerHTML = '<i class="ph-bold ph-check"></i>';
         } else {
-            floatingIcon.classList.remove('ph-x-circle');
-            floatingIcon.classList.add('ph-squares-four');
+            checkboxVisual.style.backgroundColor = 'var(--bg-input)';
+            checkboxVisual.innerHTML = '';
+            checkboxVisual.style.border = '1px solid rgba(255,255,255,0.2)';
         }
+    });
+</script>
+
+<script>
+  const floatingBtn = document.querySelector('.floating-all-btn');
+const floatingIcon = floatingBtn.querySelector('i');
+const bottomSheet = document.querySelector('.bottom-sheet-menu');
+const sheetOverlay = document.querySelector('.sheet-overlay');
+
+function toggleMenu() {
+    // Toggle (tambah/hapus) class active dan open
+    floatingBtn.classList.toggle('active');
+    bottomSheet.classList.toggle('open');
+    sheetOverlay.classList.toggle('active');
+    
+    // Ganti ikon
+    if (floatingBtn.classList.contains('active')) {
+        floatingIcon.classList.remove('ph-squares-four');
+        floatingIcon.classList.add('ph-x-circle');
+    } else {
+        floatingIcon.classList.remove('ph-x-circle');
+        floatingIcon.classList.add('ph-squares-four');
     }
+}
 
-    if(floatingBtn) floatingBtn.addEventListener('click', toggleMenu);
-    if(sheetOverlay) sheetOverlay.addEventListener('click', toggleMenu);
+// Buka/tutup menu ketika floating button diklik
+floatingBtn.addEventListener('click', toggleMenu);
 
-    // JS Tabs
+// Menutup menu jika user mengklik area gelap (overlay) di luar menu
+sheetOverlay.addEventListener('click', toggleMenu);
+
+</script>
+
+<script>
+      // Fungsi untuk expand/collapse deskripsi
     function toggleDescription() {
         const tabDeskripsi = document.getElementById('tab-deskripsi');
         const readMoreText = document.getElementById('readMoreText');
+
+        // Menambah/menghapus class 'expanded' pada container deskripsi
         tabDeskripsi.classList.toggle('expanded');
+
+        // Mengubah teks tombol sesuai kondisi
         if (tabDeskripsi.classList.contains('expanded')) {
             readMoreText.innerText = 'Tutup deskripsi';
         } else {
@@ -662,10 +3838,33 @@
         }
     }
 
+    // Fungsi untuk ganti Tab
+    function switchTab(tabId, element) {
+        // Hapus class active dari semua tombol tab
+        const tabs = document.querySelectorAll('.tab-item');
+        tabs.forEach(tab => tab.classList.remove('active'));
+        
+        // Tambahkan class active ke tombol yang diklik
+        element.classList.add('active');
+
+        // Sembunyikan semua konten tab
+        const contents = document.querySelectorAll('.tab-content');
+        contents.forEach(content => content.classList.remove('active'));
+
+        // Tampilkan konten tab yang dipilih
+        document.getElementById('tab-' + tabId).classList.add('active');
+    }
+    
+    //panduan
+    // Fungsi untuk expand/collapse panduan
     function toggleGuide() {
         const tabPanduan = document.getElementById('tab-panduan');
         const readMoreGuideText = document.getElementById('readMoreGuideText');
+
+        // Menambah/menghapus class 'expanded' pada container panduan
         tabPanduan.classList.toggle('expanded');
+
+        // Mengubah teks tombol sesuai kondisi
         if (tabPanduan.classList.contains('expanded')) {
             readMoreGuideText.innerText = 'Tutup panduan';
         } else {
@@ -673,79 +3872,390 @@
         }
     }
 
-    function switchTab(tabId, element) {
-        const tabs = document.querySelectorAll('.tab-item');
-        tabs.forEach(tab => tab.classList.remove('active'));
-        element.classList.add('active');
-        
-        const contents = document.querySelectorAll('.tab-content');
-        contents.forEach(content => {
-            content.classList.remove('active');
-            content.classList.add('hidden');
-            content.classList.remove('block');
-        });
-        
-        const selectedTab = document.getElementById('tab-' + tabId);
-        if(selectedTab) {
-            selectedTab.classList.add('active');
-            selectedTab.classList.remove('hidden');
-            selectedTab.classList.add('block');
-        }
-    }
 
-    // JS Flash Sale
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const snowContainers = document.querySelectorAll('.has-snow');
+    
+    snowContainers.forEach(container => {
+        // 1. Buat wadah khusus untuk salju di dalam section
+        const snowWrapper = document.createElement('div');
+        snowWrapper.classList.add('snow-wrapper');
+        container.appendChild(snowWrapper);
+
+        const snowCount = 25; 
+        
+        for (let i = 0; i < snowCount; i++) {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            
+            const size = Math.random() * 3 + 2; 
+            const left = Math.random() * 100; 
+            const duration = Math.random() * 2.5 + 2; 
+            const delay = Math.random() * 5; 
+            
+            snowflake.style.width = `${size}px`;
+            snowflake.style.height = `${size}px`;
+            snowflake.style.left = `${left}%`;
+            snowflake.style.animationDuration = `${duration}s`;
+            snowflake.style.animationDelay = `${delay}s`;
+            
+            // 2. Masukkan partikel salju ke dalam wrapper, BUKAN ke container utama
+            snowWrapper.appendChild(snowflake);
+        }
+    });
+});
+</script>
+<script>
+    // Logika Timer Flash Sale
     function startFlashSaleTimer() {
-        let hours = 2, minutes = 15, seconds = 45;
+        let hours = 2;
+        let minutes = 15;
+        let seconds = 45;
+
         const hourEl = document.getElementById('fs-hours');
         const minEl = document.getElementById('fs-mins');
         const secEl = document.getElementById('fs-secs');
-        
+
         if(!hourEl || !minEl || !secEl) return;
-        
+
         setInterval(() => {
-            if (seconds > 0) { seconds--; } 
-            else {
+            if (seconds > 0) {
+                seconds--;
+            } else {
                 seconds = 59;
-                if (minutes > 0) { minutes--; } 
-                else { minutes = 59; if (hours > 0) hours--; }
+                if (minutes > 0) {
+                    minutes--;
+                } else {
+                    minutes = 59;
+                    if (hours > 0) hours--;
+                }
             }
+
+            // Memastikan format angka selalu dua digit (contoh: 09 bukan 9)
             hourEl.innerText = hours.toString().padStart(2, '0');
             minEl.innerText = minutes.toString().padStart(2, '0');
             secEl.innerText = seconds.toString().padStart(2, '0');
         }, 1000);
     }
 
-    // JS Animasi Salju (DOM Load)
-    document.addEventListener('DOMContentLoaded', function() {
-        startFlashSaleTimer();
+    document.addEventListener('DOMContentLoaded', startFlashSaleTimer);
+</script>
+<script>
+    // Fungsi untuk interaksi Tab Kategori Produk
+    function switchCategory(catId, element) {
+        // Hapus active dari semua tombol tab
+        const tabs = document.querySelectorAll('.cat-tab');
+        tabs.forEach(tab => tab.classList.remove('active'));
+        
+        // Tambahkan active ke tombol yang diklik
+        element.classList.add('active');
 
-        const snowContainers = document.querySelectorAll('.has-snow');
-        snowContainers.forEach(container => {
-            const snowWrapper = document.createElement('div');
-            snowWrapper.classList.add('snow-wrapper');
-            container.appendChild(snowWrapper);
-            
-            const snowCount = 25; 
-            for (let i = 0; i < snowCount; i++) {
-                const snowflake = document.createElement('div');
-                snowflake.classList.add('snowflake');
-                
-                const size = Math.random() * 3 + 2; 
-                const left = Math.random() * 100; 
-                const duration = Math.random() * 2.5 + 2; 
-                const delay = Math.random() * 5; 
-                
-                snowflake.style.width = `${size}px`;
-                snowflake.style.height = `${size}px`;
-                snowflake.style.left = `${left}%`;
-                snowflake.style.animationDuration = `${duration}s`;
-                snowflake.style.animationDelay = `${delay}s`;
-                
-                snowWrapper.appendChild(snowflake);
-            }
-        });
-    });
+        // Sembunyikan semua konten kategori
+        const contents = document.querySelectorAll('.tab-category-content');
+        contents.forEach(content => content.classList.remove('active'));
+
+        // Tampilkan konten kategori yang sesuai dengan id
+        document.getElementById('cat-' + catId).classList.add('active');
+    }
 </script>
 
+<script>
+  // Script Buka/Tutup Modal (Panggil fungsi openReviewModal() saat halaman invoice dimuat jika is_reviewed = false)
+function openReviewModal() {
+    document.getElementById('reviewModal').classList.add('active');
+}
+
+function closeReviewModal() {
+    document.getElementById('reviewModal').classList.remove('active');
+}
+
+// Script Bintang Rating
+const stars = document.querySelectorAll('.star-input');
+let ratingValue = 0;
+
+stars.forEach((star, index) => {
+    star.addEventListener('click', () => {
+        ratingValue = index + 1; // Simpan nilai rating 1-5
+        
+        // Reset semua bintang dulu
+        stars.forEach(s => {
+            s.classList.remove('ph-fill', 'active');
+            s.classList.add('ph');
+        });
+        
+        // Warnai bintang sesuai yang diklik
+        for(let i = 0; i <= index; i++) {
+            stars[i].classList.remove('ph');
+            stars[i].classList.add('ph-fill', 'active');
+        }
+    });
+});
+
+// Logika Quick Select Tags (Hanya bisa pilih SATU)
+const quickTags = document.querySelectorAll('.quick-tag');
+
+quickTags.forEach(tag => {
+    tag.addEventListener('click', () => {
+        // 1. Hapus class 'active' dari SEMUA tag
+        quickTags.forEach(t => t.classList.remove('active'));
+        
+        // 2. Tambahkan class 'active' HANYA ke tag yang baru saja diklik
+        tag.classList.add('active');
+        
+        // Opsional: Untuk ambil nilainya misal mau dilempar ke form/backend
+        // const selectedTagValue = tag.innerText;
+        // console.log("Tag terpilih:", selectedTagValue);
+    });
+});
+
+
+</script>
+
+<script>
+    // Buka popup info
+    function openInfoModal() {
+        document.getElementById('infoModal').classList.add('active');
+    }
+
+    // Tutup popup info
+    function closeInfoModal() {
+        document.getElementById('infoModal').classList.remove('active');
+    }
+
+    // Arahkan ke tab panduan dan otomatis buka kontennya
+    function goToGuideTab() {
+        // Tutup modal terlebih dahulu
+        closeInfoModal();
+        
+        // Cari elemen tab Panduan (index ke-1 karena tab pertama Deskripsi)
+        const tabs = document.querySelectorAll('.tab-item');
+        const guideTabElement = tabs[1]; 
+        
+        if (guideTabElement) {
+            // Pindah ke tab panduan menggunakan fungsi yang sudah kamu buat
+            switchTab('panduan', guideTabElement);
+            
+            // Scroll layar ke area tab agar pengguna langsung melihatnya
+            document.querySelector('.description-section').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+
+            // Opsional: Langsung expand (buka penuh) teks panduannya
+            const tabPanduan = document.getElementById('tab-panduan');
+            const readMoreGuideText = document.getElementById('readMoreGuideText');
+            
+            if (!tabPanduan.classList.contains('expanded')) {
+                tabPanduan.classList.add('expanded');
+                if(readMoreGuideText) readMoreGuideText.innerText = 'Tutup panduan';
+            }
+        }
+    }
+</script>
+
+<script>
+// ================= TOAST NOTIFICATION =================
+// Fungsi memunculkan Toast Notification
+function showToast(message) {
+    const toast = document.getElementById('customToast');
+    const toastMessage = document.getElementById('toastMessage');
+    
+    // Set teks pesan
+    toastMessage.innerText = message;
+    
+    // Munculkan toast
+    toast.classList.add('show');
+    
+    // Hilangkan otomatis setelah 3 detik
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+
+// ================= MODAL PEMBAYARAN & VALIDASI =================
+// Buka Modal Pembayaran beserta Validasi Input
+function openPaymentModal() {
+    const inputId = document.getElementById('inputId');
+    const inputServer = document.getElementById('inputServer');
+    const summaryPrice = document.getElementById('summaryPrice').innerText;
+    let isValid = true;
+
+    // 1. Cek apakah produk sudah dipilih
+    if (summaryPrice === 'Rp 0') {
+        showToast("Silakan pilih nominal produk terlebih dahulu!"); 
+        return; 
+    }
+
+    // 2. Cek Input ID Game
+    if (inputId && inputId.value.trim() === '') {
+        inputId.classList.remove('error-shake'); // Reset animasi
+        void inputId.offsetWidth; // Trigger reflow agar animasi bisa diulang
+        inputId.classList.add('error-shake');
+        isValid = false;
+    }
+
+    // 3. Cek Input Server
+    if (inputServer && inputServer.value.trim() === '') {
+        inputServer.classList.remove('error-shake');
+        void inputServer.offsetWidth; 
+        inputServer.classList.add('error-shake');
+        isValid = false;
+    }
+
+    // 4. Jika tidak valid, hentikan fungsi dan fokuskan ke form yang kosong
+    if (!isValid) {
+        if (inputId.value.trim() === '') {
+            inputId.focus();
+        } else {
+            inputServer.focus();
+        }
+        return; // Modal tidak akan terbuka
+    }
+
+    // --- Jika semua valid, sinkronisasi data dan buka modal ---
+    
+    // Data untuk Modal Utama
+    document.getElementById('paymentModal').classList.add('active');
+    document.getElementById('modalItemName').innerText = document.getElementById('summaryTitle').innerText;
+    document.getElementById('modalItemPrice').innerText = document.getElementById('summaryPrice').innerText;
+    
+    // Data untuk Rincian yang Expandable (Memanjang ke atas)
+    document.getElementById('modalUserId').innerText = inputId.value;
+    document.getElementById('modalServerId').innerText = inputServer.value;
+    
+    // Ambil metode pembayaran yang sedang aktif saat pertama kali dibuka
+    const activePayment = document.querySelector('.pm-bento-item.active .pm-bento-name');
+    document.getElementById('modalSelectedPayment').innerText = activePayment ? activePayment.innerText : 'Belum dipilih';
+}
+
+// Fitur tambahan: Hilangkan merah-merah saat user mulai mengetik
+if (document.getElementById('inputId')) {
+    document.getElementById('inputId').addEventListener('input', function() {
+        this.classList.remove('error-shake');
+    });
+}
+if (document.getElementById('inputServer')) {
+    document.getElementById('inputServer').addEventListener('input', function() {
+        this.classList.remove('error-shake');
+    });
+}
+
+// Tutup Modal Pembayaran
+function closePaymentModal() {
+    document.getElementById('paymentModal').classList.remove('active');
+    
+    // Kembalikan rincian pesanan ke posisi tertutup saat modal di-close
+    const summaryContainer = document.getElementById('pmSummaryContainer');
+    if (summaryContainer) {
+        summaryContainer.classList.remove('open');
+    }
+}
+
+// ================= RINCIAN PESANAN (EXPANDABLE) =================
+// Fungsi untuk memutar icon dan memunculkan rincian
+function toggleSummaryDetails() {
+    const summaryContainer = document.getElementById('pmSummaryContainer');
+    if (summaryContainer) {
+        summaryContainer.classList.toggle('open');
+    }
+}
+
+// ================= METODE PEMBAYARAN BENTO GRID =================
+// Logika seleksi bento grid (Vanilla JS)
+function selectPayment(element) {
+    // Hapus class 'active' dari semua kotak bento
+    const items = document.querySelectorAll('.pm-bento-item');
+    items.forEach(item => item.classList.remove('active'));
+    
+    // Tambahkan class 'active' ke kotak yang diklik
+    element.classList.add('active');
+    
+    // Sinkronisasi: Update teks 'Metode Bayar' di dalam rincian yang meluas ke atas
+    const paymentName = element.querySelector('.pm-bento-name').innerText;
+    const modalSelectedPayment = document.getElementById('modalSelectedPayment');
+    
+    if (modalSelectedPayment) {
+        modalSelectedPayment.innerText = paymentName;
+    }
+}
+
+// ================= PROSES PEMBAYARAN =================
+function processPayment() {
+    // Cari apakah ada kotak metode pembayaran yang sedang aktif
+    const activePayment = document.querySelector('.pm-bento-item.active');
+    
+    // Jika tidak ada yang aktif (belum dipilih)
+    if (!activePayment) {
+        showToast("Silakan pilih metode pembayaran terlebih dahulu!");
+        return; // Hentikan proses
+    }
+    
+    // Jika sudah ada yang dipilih, ambil nama pembayarannya
+    const paymentName = activePayment.querySelector('.pm-bento-name').innerText;
+    
+    // Lanjutkan ke proses checkout (contoh)
+    showToast(`Memproses pembayaran dengan ${paymentName}...`);
+    
+    // Di sini nanti kamu bisa tambahkan kode untuk redirect ke halaman invoice / backend
+}
+
+</script>
+
+
+<script>
+  // Fungsi memunculkan Toast Notification
+function showToast(message) {
+    const toast = document.getElementById('customToast');
+    const toastMessage = document.getElementById('toastMessage');
+    
+    toastMessage.innerText = message;
+    
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+
+</script>
+
+<script>
+  // Menonaktifkan Klik Kanan (Context Menu)
+document.addEventListener('contextmenu', function(event) {
+    event.preventDefault();
+});
+
+// Menonaktifkan shortcut keyboard tertentu
+document.addEventListener('keydown', function(event) {
+    // Memblokir F12 (Developer Tools)
+    if (event.key === 'F12') {
+        event.preventDefault();
+    }
+    
+    // Memblokir Ctrl+Shift+I (Inspect Element)
+    if (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'i')) {
+        event.preventDefault();
+    }
+    
+    // Memblokir Ctrl+Shift+C (Inspect Element)
+    if (event.ctrlKey && event.shiftKey && (event.key === 'C' || event.key === 'c')) {
+        event.preventDefault();
+    }
+    
+    // Memblokir Ctrl+Shift+J (Console)
+    if (event.ctrlKey && event.shiftKey && (event.key === 'J' || event.key === 'j')) {
+        event.preventDefault();
+    }
+    
+    // Memblokir Ctrl+U (View Page Source)
+    if (event.ctrlKey && (event.key === 'U' || event.key === 'u')) {
+        event.preventDefault();
+    }
+});
+
+</script>
 </body>
 </html>
