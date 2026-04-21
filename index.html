@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PaperVoucher</title>
+    <title>wiwokthetok</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,8 +16,8 @@
     <style>
     :root {
     /* Color Palette - Paper News Concept */
-    --bg-nav: #e6e4d8; /* Warna kertas koran untuk header/navigasi */
-    --bg-top: #f5f4eb; /* Latar belakang utama ala kertas usang (cream) */
+    --bg-nav: #f5f4eb; /* Warna kertas koran untuk header/navigasi */
+    --bg-top: #e6e4d8; /* Latar belakang utama ala kertas usang (cream) */
     --bg-bottom: #dfddd1;
     --bg-card: #ffffff; /* Latar blok konten putih bersih */
     --bg-input: #ffffff;
@@ -75,7 +75,7 @@
 
         /* ================= HEADER ================= */
         header {
-            background-color: var(--bg-nav);
+            background-color: var(--bg-top);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -254,7 +254,7 @@
         .nominal-card {
             background-color: var(--bg-card);
             /*border-radius: var(--border-radius-md);*/
-            border-radius: 4px;
+            border-radius: 0px;
             padding: 16px 10px;
             display: flex;
             align-items: center;
@@ -1116,7 +1116,7 @@
 
 .rec-card {
     background-color: var(--bg-card); /*240b6e*/
-    border: .3px solid var(--badge-cyan);
+    border: 1px solid var(--color-yellow);
     border-radius: 0px; /*6px*/
     display: flex;
     justify-content: space-between;
@@ -1414,7 +1414,7 @@
 .flash-sale-card {
     min-width: 135px;
     background-color: var(--bg-card);
-    border: 0px solid rgba(248, 206, 26, 0.25);
+    border: 0px solid var(--text-muted);
     border-radius: var(--border-radius-md);
     padding: 10px;
     position: relative;
@@ -1574,7 +1574,7 @@
 .cat-tab {
     background-color: var(--bg-card);
     border: 0px solid rgba(255, 255, 255, 0.1);
-    color: var(--text-muted);
+    color: var(--text-muted-dark);
     padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 16px;
@@ -2239,7 +2239,8 @@
 .affiliate-section {
     padding: 30px 16px;
     background-color: var(--bg-nav); /* Warna kertas usang bagian bawah */
-    border-top: 1.5px solid var(--text-muted-dark);
+    border-bottom: 0px solid var(--text-muted-dark);
+    border-top: 0px solid var(--text-muted-dark);
 }
 
 .aff-header {
@@ -2715,7 +2716,7 @@
         <div class="header-left">
             <div class="logo-container">
                 <div class="logo-icon"></div>
-                <span class="logo-text">PaperVoucher</span>
+                <span class="logo-text">wiwokthetok</span>
             </div>
         </div>
         <div class="header-right">
@@ -3049,7 +3050,7 @@
                     </ul>
 
                     <p>
-                        Singkatnya, kalau kamu mau menikmati seluruh fitur Mobile Legends secara maksimal dan instan, Diamond adalah kuncinya. Gak perlu bingung, langsung aja isi ulang Diamond MLBB kamu di <strong>PaperVoucher</strong>! Proses kilat, harga aman di kantong, dan pastinya dijamin legal.
+                        Singkatnya, kalau kamu mau menikmati seluruh fitur Mobile Legends secara maksimal dan instan, Diamond adalah kuncinya. Gak perlu bingung, langsung aja isi ulang Diamond MLBB kamu di <strong>wiwokthetok</strong>! Proses kilat, harga aman di kantong, dan pastinya dijamin legal.
                     </p>
                 </div>
                 <div class="read-more-wrapper">
@@ -3431,7 +3432,7 @@
 
 
     <footer class="main-footer">
-        <p class="footer-desc">Top Up Games Favoritmu di PaperVoucher! Tersedia Berbagai Macam Produk, Layanan & Pembayaran yang bisa digunakan. Proses Otomatis, Aman, & Pastinya Terjangkau.</p>
+        <p class="footer-desc">Top Up Games Favoritmu di blablabla! Tersedia Berbagai Macam Produk, Layanan & Pembayaran yang bisa digunakan. Proses Otomatis, Aman, & Pastinya Terjangkau.</p>
 
         <div class="footer-section">
             <h4 class="footer-title">Berlangganan Newsletter</h4>
@@ -3461,7 +3462,7 @@
             </a>
             <div class="contact-info">
                 <p>Jam Operasional: 08:00 - 23:00 WIB</p>
-                <p><i class="ph ph-envelope-simple"></i> admin@papervoucher.com</p>
+                <p><i class="ph ph-envelope-simple"></i> admin@auwouwo.com</p>
                 <p>Trowulan, Kab Mojokerto, Jawa Timur 20000</p>
             </div>
         </div>
@@ -4253,6 +4254,42 @@ document.addEventListener('keydown', function(event) {
     // Memblokir Ctrl+U (View Page Source)
     if (event.ctrlKey && (event.key === 'U' || event.key === 'u')) {
         event.preventDefault();
+    }
+});
+
+</script>
+
+<script>
+  // 1. Mematikan Klik Kanan (Context Menu)
+document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+});
+
+// 2. Mematikan tombol shortcut untuk Inspect Element & View Source
+document.addEventListener('keydown', function(e) {
+    // Mematikan F12
+    if (e.key === 'F12' || e.keyCode === 123) {
+        e.preventDefault();
+    }
+    
+    // Mematikan Ctrl+Shift+I (Inspect Element) & Cmd+Option+I (Mac)
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'I' || e.key === 'i')) {
+        e.preventDefault();
+    }
+    
+    // Mematikan Ctrl+Shift+J (Console) & Cmd+Option+J (Mac)
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'J' || e.key === 'j')) {
+        e.preventDefault();
+    }
+    
+    // Mematikan Ctrl+U (View Page Source) & Cmd+Option+U (Mac)
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'U' || e.key === 'u')) {
+        e.preventDefault();
+    }
+    
+    // Mematikan Ctrl+S (Save Page) & Cmd+Option+S (Mac)
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'S' || e.key === 's')) {
+        e.preventDefault();
     }
 });
 
